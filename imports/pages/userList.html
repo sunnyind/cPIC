@@ -1,0 +1,12 @@
+<template name="userList">
+  Folgende Nutzer sind Online: 
+  <ul>
+    <!-- Hier soll der einladen Button in eine IF bedingung  -->
+   {{#each usersOnline}}
+   <li> {{username}}  
+   </li>
+   {{/each}}
+  </ul>
+
+  
+</template>
