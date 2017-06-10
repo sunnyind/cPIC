@@ -7,9 +7,10 @@ import './message.js';
 
  import { Messages } from '../api/messages.js';
  
+ 
  Template.getStarted.helpers({
    messages() {
-      console.log('Nachricht');
+     console.log('Nachricht');
      return Messages.find();
    },
  });

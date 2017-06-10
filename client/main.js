@@ -11,6 +11,9 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 
 
+ import { Gruppen } from '../imports/api/messages.js';
+ 
+
 Meteor.subscribe('userStatus')
 
 Template.body.helpers({
@@ -19,14 +22,18 @@ Template.body.helpers({
 	}
 })
 
-Template.userList.helpers({
+Template.userList.({
   usersOnline:function(){
     return Meteor.users.find({ "status.online": true , "username":{$ne: Meteor.user().username}})
   },
  
 })
 
-Template.group.events({
+Template.group.helpers({
+	
+})
+
+Template.newgrouptemp.events({
 	'submit .new-gruppe'(event){
 		event.preventDefault();
 
@@ -34,10 +41,9 @@ Template.group.events({
 		const text = target.text.value;
 
 		Gruppen.insert({
-			text,
-			createdAt: new Date(),
-			leiter: Meteor.userID(),
+			Gruppe : text,
 			nutzer: Meteor.user().username,
+
 		})
 
 		target.text.value ='';
