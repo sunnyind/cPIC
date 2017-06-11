@@ -1,12 +1,22 @@
 <template name="userList">
   Folgende Nutzer sind Online: 
-  <ul>
-    <!-- Hier soll der einladen Button in eine IF bedingung  -->
-   {{#each usersOnline}}
-   <li> {{username}}  
-   </li>
-   {{/each}}
-  </ul>
-
+  <form class="user_online_einladen">
+    <ul>
+     {{#each usersOnline}}
+     <li> {{username}}
+     	{{#if inmygroup username}}
+    	Bereits in deiner Gruppe
+    	
+      {{else}}
+    	<button name="sub" type="submit" value="{{username}}">in gruppe einladen</button>
+    	
+      {{/if}}
+     </li>
+     {{/each}}
+    </ul>
+  </form>
   
+
+    
+
 </template>

@@ -1,8 +1,21 @@
 <template name="group">
+  <br><br>
+  <!-- Hier konnte ich nicht auf ein einziges element zu greifen und musste es mit each machen-->
+  
+  
+  <br>
 
- 
+  <!-- Hier kann es auch elegenater gemacht werden, das direkt in einer abfrage
+  alle angezeigt werden, die in der Gruppe sind und die dann keinen einlade button haben
 
+  Personen einladen: (keine Gruppe)
+  {{#each notgroupmember}}
+  <li>{{username}}
+  <button type="submit" value="{{username}}"> in gruppe einladen</button>
 
+  </li>
+  {{/each}}
+-->
 </template>
 
 
@@ -10,13 +23,27 @@
   <!-- Eigentlich soll es Hier möglich sein, eine Gruppe zu erstellen, wenn man noch kein
   Mitglied einer Gruppe ist. 
   -->
-    <form name="new-gruppe">
-    Gruppe erstellen: 
-    <input type="text" name="text" placeholder="Guppennamen eingeben">
+
+
+    {{#if ingroup}}
+      Deine Gruppe LAUTET: {{groupname}}<br>
+      Du bist bereits mit Folgenden Nutzern in einer Gruppe:
+      {{#each groupmember}}
+      <li>{{nutzer}}
+
+
+      </li>
+      {{/each}}
+  
+    {{else}}
+    <form class="new-gruppe">
+    Gruppe erstellen:(noch in keiner gruppe)<br> 
+    <input type="text" name="text" placeholder="Guppennamen eingeben" required>
     <button type="submit">Gruppe erstellen</button>
     <br>
     <br>
     </form>
 
+    {{/if}}
 
 </template>
