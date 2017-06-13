@@ -1,10 +1,12 @@
 import '../ui/layouts/homeLayout.html'
 import '../ui/layouts/mainLayout.html'
 import '../ui/layouts/startMenu.html'
+import '../ui/layouts/spielLayout.html'
 import '../ui/layouts/header.html'
 import '../pages/getStarted.html'
 import '../pages/miniGame.html'
 import '../pages/infos.html'
+import '../pages/raten.html'
 
 import '../pages/userList.html'
 import '../pages/message.html'
@@ -34,3 +36,12 @@ FlowRouter.route('/infos', {
 		console.log("Looking at infos?");
 	}
 });
+
+FlowRouter.route('/spiel', {
+	name: 'spiel',
+	action() {
+		BlazeLayout.render('spielLayout', {main: 'raten'});
+		console.log("Looking at a game?");
+	}
+});
+

@@ -1,0 +1,14 @@
+<template name="spielLayout">
+	{{> header}}
+	<div> 
+		Das ist das spielLayout
+	</div>
+	<main>
+		{{> Template.dynamic template=main}}
+	</main>
+	<side>
+		<div class="picGallery">
+			{{> miniGame}}
+		</div>
+	</side>
+</template>
