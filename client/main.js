@@ -17,7 +17,7 @@ import 'bootstrap/dist/css/bootstrap-theme.css';
  
 
 Meteor.subscribe('userStatus')
-
+Meteor.subscribe('userGruppen')
 //ein paar allgemeine Funktionen
 
 function f_meineGruppe (){

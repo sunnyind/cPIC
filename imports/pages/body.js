@@ -6,7 +6,7 @@ import './message.js';
 
 
  import { Messages } from '../api/messages.js';
- 
+ Meteor.subscribe('userMessages')
  
  Template.getStarted.helpers({
    messages() {
