@@ -16,8 +16,8 @@ import 'bootstrap/dist/css/bootstrap-theme.css';
  import { Gruppen } from '../imports/api/messages.js';
  
 
-Meteor.subscribe('userStatus')
-Meteor.subscribe('userGruppen')
+handler_user = Meteor.subscribe('userStatus')
+handler_gruppen = Meteor.subscribe('userGruppen')
 //ein paar allgemeine Funktionen
 
 function f_meineGruppe (){
@@ -48,18 +48,25 @@ Template.userList.helpers({
 	var y2 = f_meineGruppe();
   	return y==y2
   },
+})
 
-  'submit .user_online_einladen'(event){
-	const nameeinladen = event.target.sub.value;
-	const test = target.submit.value;
+Template.userList.events({
+	'click .user_online_einladen': function(event){
+	//verhindert neu laden der seite
+    event.preventDefault();
+    var getnam= event.target.name;
+    console.log(getnam);
+
+	var getUser = event.target.value;
 	var now = f_meineGruppe();
-		//Gruppen.find({"nutzer": Meteor.user().username})
-	Gruppen.update(
-		{"nutzer": nameeinladen},
-		{$set: {"Gruppe": now}}
-	);
+	console.log (Meteor.call('useridzuruck', getUser));
+	Gruppen.insert({
+		Gruppe:now,
+		nutzer: getUser 
+	});
+	return false;
+   },
 
-   }
 })
 
 Template.group.helpers({
@@ -83,12 +90,18 @@ Template.newgrouptemp.events({
 		Gruppen.insert({
 			Gruppe : text,
 			nutzer: Meteor.user().username,
-
 		})
 
 		target.text.value ='';
 
+	},
+
+	'submit .leavegroup':function(event){
+		event.preventDefault();
+		console.log(Meteor.user().username);
+		Meteor.call('gruppeverlassen', Meteor.user().username);
 	}
+
 })
 
 Template.newgrouptemp.helpers({
