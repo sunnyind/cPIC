@@ -1,4 +1,5 @@
-import { Random } from 'meteor/random';
+import { Meteor } from 'meteor/meteor';
+import { Tracker } from 'meteor/tracker';
 
 import '../imports/startup/routes.js';
 import 'font-awesome/css/font-awesome.css';
@@ -13,8 +14,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 
 
- import { Gruppen } from '../imports/api/messages.js';
- 
+import { Gruppen } from '../imports/api/messages.js';
+import { TempBilder } from'../imports/api/messages.js';
 
 Meteor.subscribe('userStatus')
 Meteor.subscribe('userGruppen')
@@ -28,9 +29,6 @@ function f_seineGruppe (x){
 	return Gruppen.findOne({"nutzer": x}).Gruppe
 }
 
-function randNumber(min, max) {
-		return Math.floor( Random.fraction() * (max-min+1))+min;
-	}
 
 Template.body.helpers({
 	actual_user(){
@@ -56,7 +54,8 @@ Template.userList.helpers({
 		//Gruppen.find({"nutzer": Meteor.user().username})
 	Gruppen.update(
 		{"nutzer": nameeinladen},
-		{$set: {"Gruppe": now}}
+		{$set: {"Gruppe": now}},
+		{"ready": false}
 	);
 
    }
@@ -83,13 +82,46 @@ Template.newgrouptemp.events({
 		Gruppen.insert({
 			Gruppe : text,
 			nutzer: Meteor.user().username,
+			ready: false,
 
 		})
 
 		target.text.value ='';
 
+	},
+
+	'submit .rdy'(event) {
+		event.preventDefault();
+		id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;
+		btn = document.getElementsByClassName("rdy");
+		ready = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":0, "ready": 1})[0].ready;
+
+		if (ready) {
+			Gruppen.update({ _id :id}, {$set: {ready : false}});
+			btn[0].style.backgroundColor = "grey";
+		} else {
+			Gruppen.update({ _id : id}, {$set: {ready : true}});
+			btn[0].style.backgroundColor = "green";
+			console.log("test1");
+			const query = TempBilder.find();
+			Tracker.autorun(() => {
+				handler = Meteor.subscribe('spielStart',f_meineGruppe(), {
+				onReady: function() {
+					const result = Meteor.call('bereit', f_meineGruppe());
+				}
+			});
+			});
+			const handle = query.observeChanges({
+				changed: function(id, fields) {
+					FlowRouter.go('spiel');
+				},
+				added: function(id, fields) {
+					FlowRouter.go('spiel');
+				}
+			});
+		}
 	}
-})
+}),
 
 Template.newgrouptemp.helpers({
 	
@@ -109,39 +141,11 @@ Template.newgrouptemp.helpers({
 })
 
 Template.raten.helpers({
-
-
-	randBilder(){
-		x = true; // random Zahl nicht im Zahlenarray
-		zeiger = Bilder.find();
-		max = zeiger.count(); // Anzahl Bilder in db
-		randNums = [0,0,0,0,0,0,0,0]; // Array mit random Zahlen
-		for (i = 0; i< randNums.length; i++) {
-			rand = randNumber(0,max); // random Zahl zwischen 1 und Anzahl Bilder
-			console.log(rand);
-/*			for (j = 0; j < randNums.length; j++) {
-				if (randNums[j] == rand) { //random Zahle bereits im Array
-					i--; 
-					x = false;
-					break;
-				}
-			}*/
-			if (x) {
-				randNums[i] = rand;
-			} else {
-				x = true;
-			}
-
-		}
-		zeiger = Bilder.find().fetch();
-		//merke = zeiger.toArray(); //Array mit den Bildern
-		randPics = new Mongo.Collection();
-		for (i = 0; i<randNums.length; i++) {
-			a = randNums[i];
-			randPics.insert(zeiger[a]);
-		}
-		return randPics.find();
+	showPics: function() {
+		return TempBilder.find({"Gruppe" : f_meineGruppe()},{_id:0, "Bilder": 1}).fetch();
 	}
+
+
 
 })
 

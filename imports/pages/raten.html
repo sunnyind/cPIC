@@ -1,8 +1,9 @@
 <template name="raten">
 	<h11> Bilder:</h11>
-	<ul>
-		{{#each randBilder}}
+<ul>
+		{{#each showPics.Bilder}}
+			Bild:
 			<li><img id= "{{_id}}" class="bild" src="{{webResolutionUrlUrl}}" style=" border: 10px double; border-color: grey" ></li>
 		{{/each}}
-	</ul>
+	</ul> 
 </template>
