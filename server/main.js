@@ -1,9 +1,12 @@
 import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random';
+
+import { Bilder } from '../imports/api/messages.js'
 import { Messages } from '../imports/api/messages.js';
 import { Gruppen } from '../imports/api/messages.js';
 import { TempBilder } from '../imports/api/messages.js';
 import '../imports/api/messages.js';
+
 
 // Hilfsfunktionen:
 
@@ -39,14 +42,59 @@ function randBilder(){
 Meteor.methods({
 	bereit(gruppenName) {
 
-//		id = TempBilder.find({"Gruppe": gruppenName}).fetch({"_id":1})[0]._id;
 		zaehle = Gruppen.find({"Gruppe" : gruppenName, "ready" : false}).count();
 		anzahl = Gruppen.find({"Gruppe" : gruppenName}).count();
 		if(anzahl > 1 && zaehle == 0) {
+			//zufällige Bilder auswählen:
+			if (TempBilder.find({"Gruppe" : gruppenName}).count() == 0) {
+				TempBilder.insert({"Gruppe": gruppenName, auswahl : false, route1 : false, route2 : false});
+			}
+			
+			id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
 			pics = randBilder();
-		TempBilder.insert({"Gruppe": gruppenName, "Bilder" : pics });
+			TempBilder.update({_id : id}, {$set: { Bild0 : pics[0]._id} });
+			TempBilder.update({_id : id}, {$set: { Bild1 : pics[1]._id} });
+			TempBilder.update({_id : id}, {$set: { Bild2 : pics[2]._id} });
+			TempBilder.update({_id : id}, {$set: { Bild3 : pics[3]._id} });
+			TempBilder.update({_id : id}, {$set: { Bild4 : pics[4]._id} });
+			TempBilder.update({_id : id}, {$set: { Bild5 : pics[5]._id} });
+			TempBilder.update({_id : id}, {$set: { Bild6 : pics[6]._id} });
+			TempBilder.update({_id : id}, {$set: { Bild7 : pics[7]._id} });
+			//tager auswählen:
+			rand = randNumber(0,anzahl-1);
+			console.log(rand);
+			grpid = Gruppen.find({"Gruppe" : gruppenName}).fetch({_id:1})[rand]._id;
+			Gruppen.update({_id : grpid}, {$set: {tager: true}});
+			//richtiges Bild auswählen:
+			rand = randNumber(0,7);
+			console.log(rand);
+			TempBilder.update({_id : id}, {$set: {richtig : pics[rand]._id} });
+			TempBilder.update({_id : id}, {$set: { route1 : true} });		
 		}
 		
+	},
+
+	auswaehlen(wahl,gruppenName) {
+		//Sobald jemand ein Bild auswählt wird verhindert, dass sofort weitergeroutet wird:
+		console.log("start");
+		id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
+		TempBilder.update({_id : id}, {$set: { route1 : false } });
+		console.log("updated");
+
+		zaehle = Gruppen.find({"Gruppe" : gruppenName, "auswahl" : wahl}).count();
+		console.log(zaehle);
+		anzahl = Gruppen.find({"Gruppe" : gruppenName}).count() - 1;
+		console.log(anzahl);
+		if (zaehle == anzahl) {
+			console.log("alle haben gewählt");
+			zeiger = TempBilder.findOne({"Gruppe" : gruppenName});
+			if (wahl.equals(zeiger.richtig)) {
+				id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
+				TempBilder.update({_id : id}, {$set: { auswahl : true } });
+				console.log("richtig");
+			}
+			TempBilder.update({_id : id}, {$set: { route2 : true } });
+		}
 	}
 });
 
@@ -63,6 +111,35 @@ Gruppen.allow({
 });
 
 
+
+Meteor.methods({
+	gruppeverlassen(x){
+		Gruppen.remove({"nutzer":x});
+	},
+
+	gruppeinladen(us, grup){
+		Gruppen.insert({})
+	}
+
+});
+
+
+
+
+/*UserStatus.events.on("connectionLogout",function(userId){
+	console.log(userId)
+	//gruppeverlassen2 ( Meteor.user({"_id":this.userId}).username )
+	//var x =Meteor.user({"_id":userId}) 
+	Gruppen.remove({"nutzer": userId});
+
+	Meteor.users.find({ "status.online": true }).observeChanges({
+  removed(id){
+    Gruppe.remove("nutzer": this.username);
+  }
+});
+	
+})*/
+
 Meteor.publish("userStatus", function() {
   return Meteor.users.find({ "status.online": true });
 });
@@ -76,9 +153,15 @@ Meteor.publish("userMessages", function(){
 });
 
 Meteor.publish("spielStart", function(gruppenName) {
-	return TempBilder.find({"Gruppe": gruppenName});
+	return TempBilder.find({"Gruppe": gruppenName},{fields: { Gruppe : 0}});
+});
+
+Meteor.publish("bilder",function() {
+	return Bilder.find();
 });
 
 Meteor.startup(() => {
   // code to run on server at startup
 });
+
+

@@ -7,6 +7,7 @@ import '../pages/getStarted.html'
 import '../pages/miniGame.html'
 import '../pages/infos.html'
 import '../pages/raten.html'
+import '../pages/taggen.html'
 
 import '../pages/userList.html'
 import '../pages/message.html'
@@ -45,3 +46,10 @@ FlowRouter.route('/spiel', {
 	}
 });
 
+FlowRouter.route('/spielTager', {
+	name: 'spielTager',
+	action() {
+		BlazeLayout.render('spielLayout', {main: 'taggen'});
+		console.log("Looking at a game?");
+	}
+});

@@ -26,8 +26,13 @@
 
 
     {{#if ingroup}}
-      Deine Gruppe LAUTET: {{groupname}}<br>
+      <form class="leavegroup">
+      Deine Gruppe lautet: {{groupname}} 
+      <button type="submit">Gruppe verlassen</button>
+
+      <br>
       Du bist bereits mit Folgenden Nutzern in einer Gruppe:
+      </form>
       {{#each groupmember}}
       <li>{{nutzer}}
 
@@ -43,7 +48,7 @@
     {{else}}
     <form class="new-gruppe">
     Gruppe erstellen:(noch in keiner gruppe)<br> 
-    <input type="text" name="text" placeholder="Guppennamen eingeben" required>
+    <input type="text" name="text" autocomplete="off" placeholder="Guppennamen eingeben" required>
     <button type="submit">Gruppe erstellen</button>
     <br>
     <br>
