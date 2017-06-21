@@ -47,7 +47,7 @@ Meteor.methods({
 		if(anzahl > 1 && zaehle == 0) {
 			//zufällige Bilder auswählen:
 			if (TempBilder.find({"Gruppe" : gruppenName}).count() == 0) {
-				TempBilder.insert({"Gruppe": gruppenName, auswahl : false, route1 : false, route2 : false});
+				TempBilder.insert({"Gruppe": gruppenName, auswahl : false, route1 : false, route2 : false, score : 0});
 			}
 			
 			id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
@@ -88,13 +88,17 @@ Meteor.methods({
 		if (zaehle == anzahl) {
 			console.log("alle haben gewählt");
 			zeiger = TempBilder.findOne({"Gruppe" : gruppenName});
-			if (wahl.equals(zeiger.richtig)) {
+			if (TempBilder.find({"Gruppe" : gruppenName, richtig : wahl}).count() > 0) {
 				id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
 				TempBilder.update({_id : id}, {$set: { auswahl : true } });
+				TempBilder.update({_id : id}, {$inc: { score : 1 } });
 				console.log("richtig");
 			}
+			console.log(wahl);
+			console.log(zeiger.richtig);
 			TempBilder.update({_id : id}, {$set: { route2 : true } });
 		}
+		return true;
 	}
 });
 

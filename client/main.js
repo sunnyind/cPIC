@@ -134,23 +134,25 @@ Template.newgrouptemp.events({
 			});
 			const handle = query.observeChanges({
 				changed: function(id, fields) {
-					if (TempBilder.find({Bild7: {$exists: true}}).count() > 0) {
+					if (TempBilder.findOne().route1) {
 						if (Gruppen.findOne({"nutzer": Meteor.user().username}).tager) {
 							FlowRouter.go('spielTager');
 						} else {
 							FlowRouter.go('spiel');
 						}
-					}
+					}	else if (TempBilder.findOne().route2) {
+						FlowRouter.go('Ergebnis');						}
 				},
 				added: function(id, fields) {
 					if (TempBilder.findOne().route1) {
 						if (Gruppen.findOne({"nutzer": Meteor.user().username}).tager) {
 							FlowRouter.go('spielTager');
+						} else {
+							FlowRouter.go('spiel');
 						}
 						FlowRouter.go('spiel');
 					}	else if (TempBilder.findOne().route2) {
-						console.log("zwischenstand");
-					}			
+						FlowRouter.go('Ergebnis');					}			
 				}
 			});
 		}
@@ -242,9 +244,11 @@ Template.raten.events({
 		Gruppen.update({ _id : id}, {$set: {auswahl : this._id}});
 
 		Tracker.autorun(() => {
-			const result = Meteor.call('auswaehlen', this._id, f_meineGruppe());
-			handler = Meteor.subscribe('spielStart',f_meineGruppe(), {
-				onReady: function() {
+			const result = Meteor.apply('auswaehlen', [this._id, f_meineGruppe()],{
+				onResultReceived: function() {
+					handler = Meteor.subscribe('spielStart',f_meineGruppe(), {
+			
+					});
 				}
 			});
 		});

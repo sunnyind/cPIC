@@ -8,6 +8,7 @@ import '../pages/miniGame.html'
 import '../pages/infos.html'
 import '../pages/raten.html'
 import '../pages/taggen.html'
+import '../pages/zwischenErgebnis.html'
 
 import '../pages/userList.html'
 import '../pages/message.html'
@@ -50,6 +51,14 @@ FlowRouter.route('/spielTager', {
 	name: 'spielTager',
 	action() {
 		BlazeLayout.render('spielLayout', {main: 'taggen'});
+		console.log("Looking at a game?");
+	}
+});
+
+FlowRouter.route('/Ergebnis', {
+	name: 'Ergebnis',
+	action() {
+		BlazeLayout.render('spielLayout', {main: 'zwischenErgebnis'});
 		console.log("Looking at a game?");
 	}
 });
