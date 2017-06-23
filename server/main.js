@@ -1,10 +1,12 @@
 import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random';
 
+import { Tags } from '../imports/api/messages.js'
 import { Bilder } from '../imports/api/messages.js'
 import { Messages } from '../imports/api/messages.js';
 import { Gruppen } from '../imports/api/messages.js';
 import { TempBilder } from '../imports/api/messages.js';
+import { BilderLokal } from '../imports/api/messages.js';
 import '../imports/api/messages.js';
 
 
@@ -17,11 +19,11 @@ function randNumber(min, max) {
 
 //zufällige Bilder auswählen:
 function randBilder(){
-	zeiger = Bilder.find().fetch();
+	zeiger = BilderLokal.find().fetch();
 	
 	randPics = new Mongo.Collection();
 	var rand = 0;
-	var max = Bilder.find().count()-1; // Anzahl Bilder in db
+	var max = BilderLokal.find().count()-1; // Anzahl Bilder in db
 
 	for (i = 0; i< 8; i++) {
 		// random Zahl zwischen 1 und Anzahl Bilder:
@@ -40,16 +42,28 @@ function randBilder(){
 };
 
 Meteor.methods({
-	bereit(gruppenName) {
+	insertTag(gruppenName,tag) {
+		Tags.insert({"Gruppe": gruppenName, Tag: tag});
+	},
 
+	bereit(gruppenName) {
 		zaehle = Gruppen.find({"Gruppe" : gruppenName, "ready" : false}).count();
 		anzahl = Gruppen.find({"Gruppe" : gruppenName}).count();
+
 		if(anzahl > 1 && zaehle == 0) {
+			Tags.remove({"Gruppe": gruppenName});
 			//zufällige Bilder auswählen:
 			if (TempBilder.find({"Gruppe" : gruppenName}).count() == 0) {
-				TempBilder.insert({"Gruppe": gruppenName, auswahl : false, route1 : false, route2 : false, score : 0});
-			}
-			
+				TempBilder.insert({"Gruppe": gruppenName, auswahl : false , route1 : false, route2 : false, route3 : false, score : 0, round : 0});	
+			} else {
+				id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
+				TempBilder.update({_id : id}, {$set: { route2 : false } });
+				TempBilder.update({_id : id}, {$set: { route3 : false } });
+				TempBilder.update({_id : id}, {$set: {auswahl : false } });
+				if (TempBilder.find({_id : id, round: {$gt: 4 }}).count() > 0 ){
+					TempBilder.update({_id : id}, {$set: {round : 0 } });
+				}
+			}			
 			id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
 			pics = randBilder();
 			TempBilder.update({_id : id}, {$set: { Bild0 : pics[0]._id} });
@@ -70,6 +84,7 @@ Meteor.methods({
 			console.log(rand);
 			TempBilder.update({_id : id}, {$set: {richtig : pics[rand]._id} });
 			TempBilder.update({_id : id}, {$set: { route1 : true} });		
+			console.log("bereit fertig");
 		}
 		
 	},
@@ -85,18 +100,31 @@ Meteor.methods({
 		console.log(zaehle);
 		anzahl = Gruppen.find({"Gruppe" : gruppenName}).count() - 1;
 		console.log(anzahl);
+		id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
+		runde = TempBilder.findOne({_id : id}).round;
+		punkte = TempBilder.findOne({_id : id}).score;
+
 		if (zaehle == anzahl) {
 			console.log("alle haben gewählt");
 			zeiger = TempBilder.findOne({"Gruppe" : gruppenName});
 			if (TempBilder.find({"Gruppe" : gruppenName, richtig : wahl}).count() > 0) {
-				id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
 				TempBilder.update({_id : id}, {$set: { auswahl : true } });
-				TempBilder.update({_id : id}, {$inc: { score : 1 } });
-				console.log("richtig");
+				if (punkte == TempBilder.findOne({_id : id}).score) {
+					TempBilder.update({_id : id}, {$inc: { score : 1 } });
+					console.log("richtig");
+				}
 			}
 			console.log(wahl);
 			console.log(zeiger.richtig);
-			TempBilder.update({_id : id}, {$set: { route2 : true } });
+			if (runde == TempBilder.findOne({_id : id}).round) {
+				TempBilder.update({_id : id}, {$inc: { round : 1 } });
+			}
+			if (TempBilder.findOne().round >= 4) {
+				TempBilder.update({_id : id}, {$set: { route3 : true } });
+			} else {
+				TempBilder.update({_id : id}, {$set: { route2 : true } });
+
+			}
 		}
 		return true;
 	}
@@ -161,11 +189,29 @@ Meteor.publish("spielStart", function(gruppenName) {
 });
 
 Meteor.publish("bilder",function() {
-	return Bilder.find();
+	return BilderLokal.find();
+});
+
+Meteor.publish("tagsBild", function(gruppenName) {
+	return Tags.find({"Gruppe": gruppenName})
 });
 
 Meteor.startup(() => {
   // code to run on server at startup
+  if(BilderLokal.find().count() == 0) {
+  	lokal = "S06_D01.";
+  	pfad = "/Bilder/";
+  	for(i = 1; i < 28; i++ ) {
+  		if (i<10) {
+  			bildUrl =  pfad +lokal + "0" + i +".jpg";
+  		} else {
+  	  		bildUrl = pfad + lokal + i + ".jpg";
+  		}
+  		id = bildUrl;
+  		collection_id = lokal;
+  		BilderLokal.insert({_id : id, "collection_id" : collection_id, "Url": bildUrl});
+  	}
+  }
 });
 
 

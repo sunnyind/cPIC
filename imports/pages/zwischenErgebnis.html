@@ -1,8 +1,22 @@
 <template name="zwischenErgebnis">
-	<h13> Gruppe:  </h13>
+	{{clearRound}}
+	<h13> Gruppe:  {{gruppeFinden}}</h13>
 	<br>
-	<h14> Score: </h14>
+	<h14> Score: {{scoreFinden}}</h14>
 	<br> 
-	<h15> Das ausgewählte Bild war: </h15>
+	<h15> Runde {{rundenGespielt}} von 4 </h15> 
 	<br>
+	<h16> Das ausgewählte Bild war: {{bildRichtig}} </h16>
+	<br>
+	<h17>Richtiges Bild:</h17>
+	{{#with showPicRichtig}}
+	<img id="{{_id}}" class="bild" src="{{Url}}" style=" border: 10px double; border-color: grey; height: 400px; width: 400px" >
+	{{/with}}
+	<br>
+	<h18>Tags:</h18>
+	<br>
+	<form class="rdy" style=" background-color: grey; ">
+    	<button type="submit"> Bereit</button>
+    </form>
+
 </template>

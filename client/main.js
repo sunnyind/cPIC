@@ -17,13 +17,18 @@ import 'bootstrap/dist/css/bootstrap-theme.css';
 import { Gruppen } from '../imports/api/messages.js';
 import { TempBilder } from '../imports/api/messages.js';
 import { Bilder } from '../imports/api/messages.js';
+import { Tags } from '../imports/api/messages.js'
+import { BilderLokal } from '../imports/api/messages.js';
+
 
 handler_bilder = Meteor.subscribe('bilder')
 handler_user = Meteor.subscribe('userStatus')
 handler_gruppen = Meteor.subscribe('userGruppen')
+
 //ein paar allgemeine Funktionen
 
 function f_meineGruppe (){
+	console.log("blub");
 	return Gruppen.findOne({"nutzer": Meteor.user().username}).Gruppe;
 }
 
@@ -136,23 +141,36 @@ Template.newgrouptemp.events({
 				changed: function(id, fields) {
 					if (TempBilder.findOne().route1) {
 						if (Gruppen.findOne({"nutzer": Meteor.user().username}).tager) {
+							id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;		
+							Gruppen.update({ _id :id}, {$set: {ready : false}});
 							FlowRouter.go('spielTager');
 						} else {
+							id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;		
+							Gruppen.update({ _id :id}, {$set: {ready : false}});
 							FlowRouter.go('spiel');
 						}
 					}	else if (TempBilder.findOne().route2) {
-						FlowRouter.go('Ergebnis');						}
+						FlowRouter.go('Ergebnis');						
+					}	else if (TempBilder.findOne().route3) {
+						FlowRouter.go('start');
+					}	
 				},
 				added: function(id, fields) {
 					if (TempBilder.findOne().route1) {
 						if (Gruppen.findOne({"nutzer": Meteor.user().username}).tager) {
+							id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;		
+							Gruppen.update({ _id :id}, {$set: {ready : false}});
 							FlowRouter.go('spielTager');
 						} else {
+							id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;		
+							Gruppen.update({ _id :id}, {$set: {ready : false}});
 							FlowRouter.go('spiel');
 						}
-						FlowRouter.go('spiel');
 					}	else if (TempBilder.findOne().route2) {
-						FlowRouter.go('Ergebnis');					}			
+						FlowRouter.go('Ergebnis');					
+					}	else if (TempBilder.findOne().route3) {
+						FlowRouter.go('start');
+					}		
 				}
 			});
 		}
@@ -185,6 +203,8 @@ Template.newgrouptemp.helpers({
 
 Template.raten.helpers({
 	showPics: function() {
+		id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;
+		Gruppen.update({ _id : id}, {$set: {ready : false }});
 		zeiger = TempBilder.findOne();
 		merke = new Mongo.Collection();
 /*		for (i=0; i<8;i++) {zeiger = TempBilder.find().fetch();
@@ -195,29 +215,29 @@ Template.raten.helpers({
 			merke.insert({_id : zeiger[i]._id, "webResolutionUrlUrl" : pic[0].webResolutionUrlUrl});
 		}*/
 
-		pic = Bilder.findOne({_id : zeiger.Bild0});
-		merke.insert({_id : zeiger.Bild0,"webResolutionUrlUrl" :pic.webResolutionUrlUrl, "Nummer" : "0" });
+		pic = BilderLokal.findOne({_id : zeiger.Bild0});
+		merke.insert({_id : zeiger.Bild0,"Url" :pic.Url, "Nummer" : "0" });
 
-		pic = Bilder.findOne({_id : zeiger.Bild1});
-		merke.insert({_id : zeiger.Bild1,"webResolutionUrlUrl" :pic.webResolutionUrlUrl, "Nummer" : "1" });
+		pic = BilderLokal.findOne({_id : zeiger.Bild1});
+		merke.insert({_id : zeiger.Bild1,"Url" :pic.Url, "Nummer" : "1" });
 
-		pic = Bilder.findOne({_id : zeiger.Bild2});
-		merke.insert({_id : zeiger.Bild2,"webResolutionUrlUrl" :pic.webResolutionUrlUrl, "Nummer" : "2" });
+		pic = BilderLokal.findOne({_id : zeiger.Bild2});
+		merke.insert({_id : zeiger.Bild2,"Url" :pic.Url, "Nummer" : "2" });
 
-		pic = Bilder.findOne({_id : zeiger.Bild3});
-		merke.insert({_id : zeiger.Bild3,"webResolutionUrlUrl" :pic.webResolutionUrlUrl, "Nummer" : "3" });
+		pic = BilderLokal.findOne({_id : zeiger.Bild3});
+		merke.insert({_id : zeiger.Bild3,"Url" :pic.Url, "Nummer" : "3" });
 
-		pic = Bilder.findOne({_id : zeiger.Bild4});
-		merke.insert({_id : zeiger.Bild4,"webResolutionUrlUrl" :pic.webResolutionUrlUrl, "Nummer" : "4" });
+		pic = BilderLokal.findOne({_id : zeiger.Bild4});
+		merke.insert({_id : zeiger.Bild4,"Url" :pic.Url, "Nummer" : "4" });
 
-		pic = Bilder.findOne({_id : zeiger.Bild5});
-		merke.insert({_id : zeiger.Bild5,"webResolutionUrlUrl" :pic.webResolutionUrlUrl, "Nummer" : "5" });
+		pic = BilderLokal.findOne({_id : zeiger.Bild5});
+		merke.insert({_id : zeiger.Bild5,"Url" :pic.Url, "Nummer" : "5" });
 
-		pic = Bilder.findOne({_id : zeiger.Bild6});
-		merke.insert({_id : zeiger.Bild6,"webResolutionUrlUrl" :pic.webResolutionUrlUrl, "Nummer" : "6" });
+		pic = BilderLokal.findOne({_id : zeiger.Bild6});
+		merke.insert({_id : zeiger.Bild6,"Url" :pic.Url, "Nummer" : "6" });
 
-		pic = Bilder.findOne({_id : zeiger.Bild7});
-		merke.insert({_id : zeiger.Bild7,"webResolutionUrlUrl" :pic.webResolutionUrlUrl, "Nummer" : "7" });
+		pic = BilderLokal.findOne({_id : zeiger.Bild7});
+		merke.insert({_id : zeiger.Bild7,"Url" :pic.Url, "Nummer" : "7" });
 
 		return merke.find();
 	}
@@ -227,6 +247,7 @@ Template.raten.helpers({
 })
 
 Template.raten.events({
+
 	'click .bild': function(){
 		x = document.getElementById(this._id);
 		y = document.getElementsByClassName("bild");
@@ -265,8 +286,92 @@ Template.raten.events({
 
 Template.taggen.helpers({
 	showPic: function() {
+		id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;
+		Gruppen.update({ _id : id}, {$set: {ready : false }});
+		Gruppen.update({ _id : id}, {$set: {tager : false }});
+
 		zeiger = TempBilder.findOne();
-		pic = Bilder.findOne({_id : zeiger.richtig});
-		return {id : zeiger.richtig,"webResolutionUrlUrl" :pic.webResolutionUrlUrl };
+		pic = BilderLokal.findOne({_id : zeiger.richtig});
+		return {id : zeiger.richtig,"Url" :pic.Url };
 	}
 })
+
+Template.taggen.events({
+	'submit .new-tag'(event){
+		event.preventDefault();
+		const target = event.target;
+		const text = target.text.value;
+		Meteor.call('insertTag', f_meineGruppe(), text);
+		target.text.value ='';
+	}	
+})
+
+Template.zwischenErgebnis.helpers({
+	
+
+	gruppeFinden:function(){
+		id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;
+		Gruppen.update({ _id : id}, {$set: {auswahl : ""}});
+		return f_meineGruppe();
+	},
+
+	scoreFinden:function(){
+		Meteor.subscribe('spielStart',f_meineGruppe());
+
+		return  TempBilder.findOne().score;
+	},
+
+	rundenGespielt:function(){
+		return TempBilder.findOne().round;
+	}, 
+
+	bildRichtig: function() {
+		if(TempBilder.findOne().auswahl) {
+			return "Richtig!";
+		} else {
+			return "Falsch!";
+		}
+	},
+
+	showPicRichtig: function() {
+		zeiger = TempBilder.findOne();
+		pic = BilderLokal.findOne({_id : zeiger.richtig});
+		return {id : zeiger.richtig,"Url" :pic.Url };
+	}
+
+
+})
+
+Template.zwischenErgebnis.events({
+	'submit .rdy'(event) {
+		event.preventDefault();
+		id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;
+		btn = document.getElementsByClassName("rdy");
+		ready = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":0, "ready": 1})[0].ready;
+
+		if (ready) {
+			Gruppen.update({ _id :id}, {$set: {ready : false}});
+			btn[0].style.backgroundColor = "grey";
+		} else {
+			Gruppen.update({ _id : id}, {$set: {ready : true}});
+			btn[0].style.backgroundColor = "green";
+			console.log("test1");
+
+			Tracker.autorun(() => {
+				handler = Meteor.subscribe('spielStart',f_meineGruppe());
+				const result = Meteor.call('bereit', f_meineGruppe());
+			});
+
+		}
+	},
+})
+/**
+Template.tags.helpers({
+
+	TagsListe: function() {
+		Tracker.autorun(() => {
+				handler_tags = Meteor.subscribe('tagsBild',f_meineGruppe());
+			});
+	}
+	
+})*/
