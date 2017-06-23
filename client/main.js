@@ -20,6 +20,17 @@ import { Bilder } from '../imports/api/messages.js';
 import { Tags } from '../imports/api/messages.js'
 import { BilderLokal } from '../imports/api/messages.js';
 
+//vpn Sunny
+import '../imports/api/miniGame.js';
+import lightGallery from 'lightgallery';
+import jQuery from 'jquery';
+import 'lightgallery/dist/css/lightgallery.css';
+import 'jquery/dist/jquery.min.js'
+import 'lightgallery/dist/js/lightgallery.min.js';
+
+/* Plugins für LightGallery*/
+import 'lg-zoom/dist/lg-zoom.js';
+
 
 handler_bilder = Meteor.subscribe('bilder')
 handler_user = Meteor.subscribe('userStatus')

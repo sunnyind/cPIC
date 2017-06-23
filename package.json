@@ -10,7 +10,10 @@
     "bootstrap": "^3.3.7",
     "font-awesome": "^4.7.0",
     "jquery": "^3.2.1",
-    "meteor-node-stubs": "~0.2.4"
+    "lg-zoom": "^1.0.4",
+    "lightgallery": "^1.4.0",
+    "meteor-node-stubs": "~0.2.4",
+    "simpl-schema": "^0.3.1"
   },
   "version": "1.0.0",
   "main": "index.js",

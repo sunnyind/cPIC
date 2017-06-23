@@ -9,6 +9,7 @@ import '../pages/infos.html'
 import '../pages/raten.html'
 import '../pages/taggen.html'
 import '../pages/zwischenErgebnis.html'
+import '../pages/insertComment.html'
 
 import '../pages/userList.html'
 import '../pages/message.html'

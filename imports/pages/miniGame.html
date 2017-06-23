@@ -2,31 +2,104 @@
 	<div class="pic_mini">
 		<h4> MiniGame </h4>
 		<!-- Karussel mithilfe von Bootsrap zum Testen, evtl. gibt es elegantere Möglichkeiten
-		data-interval auf false damit nicht automatisch geslidet wird -->
+		data-interval auf false damit nicht automatisch geslidet wird
+		LightGallery, wenn auf Bild geklickt wird-->
 		<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
-	  		<!-- Indicators -->
-	  		<!-- Wird nicht benötigt! 
-	  		<ol class="carousel-indicators">
-	    		<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-	    		<li data-target="#myCarousel" data-slide-to="1"></li>
-	  		</ol>
-			-->
 	  		<!-- Wrapper for slides -->
 	  		<div class="carousel-inner">
-	    		<div class="item active">
-	      				<img src="/images/digilib2.jpg" alt="">
+	    		<div id="hash0" class="item active">
+	    			<a href="/images/digilib2.jpg">
+		      			<img src="/images/digilib2.jpg" alt="test">
+		      		</a>
 	    		</div>
 
-	    		<div class="item">
-	      			<img src="/images/digilib.jpg">
+	    		<div id="hash1" class="item">
+	    			<a data-sub-html="<h3>TEST</h3>" href="/images/digilib.jpg">
+		      			<img src="/images/digilib.jpg">
+		      		</a>
 	    		</div>
-
+				
+				<div id="hash2" class="item">
+					<a data-sub-html="<div class='customHtml'>
+						<a target='_black' href='https://www.google.com/'>Google.com</a></div>" href="/images/S04_E01.01.jpg">
+			      		<img src="/images/S04_E01.01.jpg">
+			      	</a>
+	    		</div>
+				
+				<div id="hash3" class="item">
+					<a href="/images/S04_E01.02.jpg">
+	      				<img src="/images/S04_E01.02.jpg">
+	      			</a>
+	    		</div>
+				
+				<div id="hash4" class="item">
+	      			<img src="/images/S04_E01.03.jpg">
+	    		</div>
+				
+				<div id="hash5" class="item">
+	      			<img src="/images/S04_E01.04.jpg">
+	    		</div>
+				
+				<div id="hash6" class="item">
+	      			<img src="/images/S04_E01.05.jpg">
+	    		</div>
+				
+				<div id="hash7" class="item">
+	      			<img src="/images/S04_E01.06.jpg">
+	    		</div>
+				
+				<div id="hash8" class="item">
+	      			<img src="/images/S04_E01.07.jpg">
+	    		</div>
+				
+				<div id="hash9" class="item">
+	      			<img src="/images/S04_E01.08.jpg">
+	    		</div>
+				
+				<div id="hash10" class="item">
+	      			<img src="/images/S04_E01.09.jpg">
+	    		</div>
+				
+				<div id="hash11" class="item">
+	      			<img src="/images/S04_E01.10.jpg">
+	    		</div>
+				
+				<div id="hash12" class="item">
+	      			<img src="/images/S04_E01.11.jpg">
+	    		</div>
+				
+				<div id="hash13" class="item">
+	      			<img src="/images/S04_E01.12.jpg">
+	    		</div>
+				
+				<div id="hash14" class="item">
+	      			<img src="/images/S04_E01.13.jpg">
+	    		</div>
+				
+				<div id="hash15" class="item">
+	      			<img src="/images/S04_E01.14.jpg">
+	    		</div>
+				
+				<div id="hash16" class="item">
+	      			<img src="/images/S04_E01.15.jpg">
+	    		</div>
+				
+				<div id="hash17" class="item">
+	      			<img src="/images/S04_E01.16.jpg">
+	    		</div>
+				
+				<div id="hash18" class="item">
+	      			<img src="/images/S04_E01.17.jpg">
+	    		</div>
+				
+				<!-- Test mit Onlinebild - theoretisch auch möglich
 	    		<div class="item">
 	    			<a href ="http://imeji-mediathek.de/imeji/file/hFfmQSuYGYX2mJzI/ff/8d/f7/21-e6c3-4ee8-9656-bfc8753c6b92/0/original/4890acd96fb23ef7b2e6558853ad056d.jpg" target="_blank">
 	      				<img src="http://imeji-mediathek.de/imeji/file/hFfmQSuYGYX2mJzI/ff/8d/f7/21-e6c3-4ee8-9656-bfc8753c6b92/0/original/4890acd96fb23ef7b2e6558853ad056d.jpg">
       				</a>
 	    		</div>
-
+				-->
+				
 		  		<!-- Left and right controls -->
 		  		<a class="left carousel-control" href="#myCarousel" data-slide="prev">
 		    		<span class="glyphicon glyphicon-chevron-left"></span>
@@ -38,10 +111,57 @@
 	  			</a>
 			</div>
 			<br>
-			<form class="tags">
-				<input type="text" name="text" placeholder="Was steht lesen sie auf dem Dia?" />
-	      	</form>
-		</div>
+			
+			<!-- Kommentarfunktion - TODO, Eingabe speichern -->
+<!--			
+			<div class="container-fluid">
+				<div class="row">
+					<h4>Was lesen Sie auf dem Bild?</h4>
+				</div>
+
+				<div class="row">
+					<div class="col-md-1">
+						<div class="miniComment">
+							<div class="status-upload">
+								<form>
+									<textarea placeholder="Hier können Sie eintippen, was sie lesen" ></textarea>
+									<button type="submit" class="btn btn-success green"><i class="fa fa-share"></i>Abschicken</button>
+								</form>
+							</div><!- Status Upload  ->
+						</div><!- miniComment ->
+					</div>
+
+				</div>
+			</div>
+-->		</div><!--Carousel-->
+
+		{{> insertComment}}
 
 	</div>
+
+
+	<!-- Script um LightGallery zu starten -->
+    <script>
+    	$('.carousel').on('slid.bs.carousel', function (e) {
+		  // mind the e parameter I added               ^ here
+		  var carouselData = $(this).data('bs.carousel');
+		  var currentIndex = carouselData.getItemIndex($(e.relatedTarget));
+
+		  // but that is unnecessary because the current slide is in e.relatedTarget
+		  var currentItem = $(e.relatedTarget);
+		  // currentItem is the current slide's div, use it
+		  console.log(currentItem);
+		});
+
+    	$(document).ready(function() {
+	    	for (i = 0; i < 20; i++) {
+				$("#hash" + i).lightGallery({
+	                hideControlOnEnd: true,
+	                download: false,
+	                counter: false
+	            }); 
+	    	}
+        });
+
+    </script>
 </template>

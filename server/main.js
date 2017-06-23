@@ -8,7 +8,7 @@ import { Gruppen } from '../imports/api/messages.js';
 import { TempBilder } from '../imports/api/messages.js';
 import { BilderLokal } from '../imports/api/messages.js';
 import '../imports/api/messages.js';
-
+import '../imports/api/miniGame.js';
 
 // Hilfsfunktionen:
 
