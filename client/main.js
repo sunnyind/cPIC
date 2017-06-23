@@ -67,12 +67,12 @@ Template.userList.events({
 	'click .user_online_einladen': function(event){
 	//verhindert neu laden der seite
     event.preventDefault();
-    var getnam= event.target.name;
-    console.log(getnam);
+    //var getnam= event.target.name;
+    //console.log(getnam);
 
 	var getUser = event.target.value;
 	var now = f_meineGruppe();
-	console.log (Meteor.call('useridzuruck', getUser));
+	console.log (getUser);
 	Gruppen.insert({
 		Gruppe:now,
 		nutzer: getUser,
@@ -145,14 +145,14 @@ Template.newgrouptemp.events({
 						console.log(Gruppen.findOne({"nutzer": Meteor.user().username}).tager);
 						console.log(Meteor.user().username);
 						if (Gruppen.find({"nutzer": Meteor.user().username, "tager" : true}).count() > 0 ) {
-							id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;		
+							id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;	
+							Gruppen.update({ _id :id}, {$set: {route : false}});	
 							Gruppen.update({ _id :id}, {$set: {ready : false}});
-							Gruppen.update({ _id :id}, {$set: {route : true}});
 							FlowRouter.go('spielTager');
 						} else {
-							id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;		
+							id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;	
+							Gruppen.update({ _id :id}, {$set: {route : false}});	
 							Gruppen.update({ _id :id}, {$set: {ready : false}});
-							Gruppen.update({ _id :id}, {$set: {route : true}});
 							FlowRouter.go('spiel');
 						}
 					}	else if (TempBilder.findOne().route2) {
@@ -167,15 +167,18 @@ Template.newgrouptemp.events({
 					console.log("added");
 					if (TempBilder.findOne().route1) {
 						if (Gruppen.findOne({"nutzer": Meteor.user().username}).tager) {
-							id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;		
+							id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;
+							Gruppen.update({ _id :id}, {$set: {route : false}});		
 							Gruppen.update({ _id :id}, {$set: {ready : false}});
 							FlowRouter.go('spielTager');
 						} else {
 							id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;		
 							Gruppen.update({ _id :id}, {$set: {ready : false}});
+							Gruppen.update({ _id :id}, {$set: {route : false}});
 							FlowRouter.go('spiel');
 						}
 					}	else if (TempBilder.findOne().route2) {
+						Gruppen.update({ _id :id}, {$set: {route : false}});
 						FlowRouter.go('Ergebnis');					
 					}	else if (TempBilder.findOne().route3) {
 						FlowRouter.go('start');
@@ -311,7 +314,10 @@ Template.taggen.events({
 })
 
 Template.zwischenErgebnis.helpers({
-	
+	clearRound: function() {
+		Gruppen.update({ _id :id}, {$set: {route : true}});
+		Meteor.call('clearRound', f_meineGruppe());
+	},
 
 	gruppeFinden:function(){
 		id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;
@@ -354,6 +360,11 @@ Template.zwischenErgebnis.events({
 	'submit .rdy'(event) {
 		event.preventDefault();
 		id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;
+		name = f_meineGruppe();
+		Gruppen.update({_id: id}, {$set: {"Gruppe": name, nutzer: Meteor.user().username,ready: false, tager: false,auswahl: ""}});
+		location.replace('start');
+		FlowRouter.go('start');
+/**		id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;
 		btn = document.getElementsByClassName("rdy");
 		ready = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":0, "ready": 1})[0].ready;
 
@@ -374,6 +385,6 @@ Template.zwischenErgebnis.events({
 				console.log("test");
 			});
 
-		}
+		}*/
 	},
 })

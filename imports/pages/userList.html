@@ -1,18 +1,18 @@
 <template name="userList">
-  Folgende Nutzer sind Online: 
+  Folgende Nutzer kannst du einladen: 
   <form >
     <ul>
      {{#each usersOnline}}
 
-     <li class="user_online_einladen"> {{username}}
+     
      	{{#if inmygroup username}}
-    	Bereits in deiner Gruppe
     	
       {{else}}
-    	<button name="{{username}}" type="onClick" value="{{username}}">in gruppe einladen</button>
-
+      <li class="user_online_einladen"> 
+    	<button name="{{username}}" type="onClick" value="{{username}}">{{username}} in gruppe einladen</button>
+      </li>
       {{/if}}
-     </li>
+     
      {{/each}}
     </ul>
   </form>
