@@ -31,7 +31,6 @@ import 'lightgallery/dist/js/lightgallery.min.js';
 /* Plugins für LightGallery*/
 import 'lg-zoom/dist/lg-zoom.js';
 
-
 handler_bilder = Meteor.subscribe('bilder')
 handler_user = Meteor.subscribe('userStatus')
 handler_gruppen = Meteor.subscribe('userGruppen')
