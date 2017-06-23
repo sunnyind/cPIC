@@ -244,7 +244,8 @@ Template.raten.helpers({
 })
 
 Template.raten.events({
-	'click .bild': function(){
+	'click .bild': function(event){
+		event.preventDefault();
 		x = document.getElementById(this._id);
 		y = document.getElementsByClassName("bild");
 		//entfernt die Markierung von anderen Bildern (falls vorhanden)
