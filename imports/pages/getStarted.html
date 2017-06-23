@@ -1,5 +1,19 @@
 <template name="getStarted">
-	<div class="chatHaupt">
+	{{> chat}}
+
+	<div class="userList">
+		{{> userList}}
+	</div>
+	
+
+	{{> newgrouptemp}}
+
+	{{> group}}
+	
+</template>
+
+<template name="chat">
+		<div class="chatHaupt">
 		<h3> Das ist der erste GruppenChat!</h3>
 		<div class="panel panel-info">
 			<div class="panel-heading">
@@ -28,17 +42,23 @@
 			{{/if}}
 		</div>
 	</div>
+</template>
 
-	<div class="userList">
-		{{> userList}}
+<template name="chat2">
+		<div class="chatHaupt">
+		<h3> Das ist der erste GruppenChat!</h3>
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				Gruppen Chat
+			</div>
+			<div class="panel-body">
+				<ul class="media-list">
+					<!-- message template -->
+					{{#each messages}}
+						{{> message}}
+					{{/each}}
+				</ul>
+			</div>
+		</div>
 	</div>
-	
-
-
-	
-
-	{{> newgrouptemp}}
-
-	{{> group}}
-	
 </template>

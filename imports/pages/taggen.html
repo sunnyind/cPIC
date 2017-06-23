@@ -5,7 +5,9 @@
 	{{/with}} 
 	<!--Darstellung der Tags-->
 	Tags: <br> 
-<!--	{{> tags}} --> 
+	{{#each TagsListe}}
+  		{{Tag}}, 
+  	{{/each}}
 	<!-- Eingabe der Tags-->
 	<form class="new-tag">
     	Neues Tag:<br> 
@@ -14,4 +16,6 @@
     <br>
     <br>
     </form>
+
+    {{> chat2}}
 </template>

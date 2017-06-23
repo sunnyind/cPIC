@@ -8,15 +8,21 @@ import './message.js';
  import { Messages } from '../api/messages.js';
  Meteor.subscribe('userMessages')
  
- Template.getStarted.helpers({
+ Template.chat.helpers({
    messages() {
      console.log('Nachricht');
      return Messages.find();
    },
  });
 
+ Template.chat2.helpers({
+   messages() {
+     console.log('Nachricht');
+     return Messages.find();
+   },
+ });
 
- Template.getStarted.events({
+ Template.chat.events({
    'submit .new-message'(event) {
     console.log('eingabe');
      // Prevent default browser form submit
