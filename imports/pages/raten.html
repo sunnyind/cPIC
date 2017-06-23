@@ -1,15 +1,25 @@
 <template name="raten">
-	<h11> Bilder:</h11>
 	<!--Darstellung der Bilder-->
+	<div id="zweite_spalte">
+		<h5>Bilder:</h5>
 	<ul>
 		{{#each showPics}}
-			<li>Bild:<img id="{{_id}}" class="bild" name="{{Nummer}}" src="{{Url}}" style=" border: 10px double; border-color: grey; height: 400px; width: 400px" ></li> 
+		<div class="raten_img">
+			<img id="{{_id}}" class="bild" name="{{Nummer}}" src="{{Url}}">
+		</div>
 		{{/each}} 
 	</ul>
-	Tags: <br> 
+	</div>
+	<div id="zweite_spalte">
+	<h5>Tags</h5>: <br> 
 	{{#each TagsListe}}
-  		{{Tag}}, 
+  	{{Tag}}, 
   	{{/each}}
+  	</div>
 
-  	{{> chat}}
+  	<br>
+  	<br>
+  	
+  	  {{> chat}}
+  	
 </template>

@@ -27,29 +27,34 @@
 
     {{#if ingroup}}
       <form class="leavegroup">
-      Deine Gruppe lautet: {{groupname}} 
-      <button type="submit">Gruppe verlassen</button>
+      <h5>Deine Gruppe lautet: {{groupname}}</h5> 
+      <div class="btn">
+         <button class="btn btn-info send" type="submit">Gruppe verlassen</button>
+      </div>
 
       <br>
-      Du bist bereits mit Folgenden Nutzern in einer Gruppe:
+      <h5>Du bist bereits mit Folgenden Nutzern in einer Gruppe:</h5>
       </form>
+
       {{#each groupmember}}
       <li>{{nutzer}}
-
-
       </li>
       {{/each}}
 
   <!-- Bereit Button-->
+
       <form class="rdy" style=" background-color: grey; ">
-         <button type="submit"> Bereit</button>
+         <button type="submit">Bereit!</button>
       </form>
 
     {{else}}
     <form class="new-gruppe">
-    Gruppe erstellen:(noch in keiner gruppe)<br> 
-    <input type="text" name="text" autocomplete="off" placeholder="Guppennamen eingeben" required>
-    <button type="submit">Gruppe erstellen</button>
+    <h5>Gruppe erstellen:(noch in keiner gruppe)</h5><br> 
+    <input type="text" name="text" autocomplete="off" placeholder="Guppennamen eingeben" required/>
+  
+    <span class="input-group-btn">
+      <button class="btn btn-info send" type="submit">Gruppe erstellen</button>
+    </span>
     <br>
     <br>
     </form>
