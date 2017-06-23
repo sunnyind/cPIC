@@ -49,21 +49,22 @@ Meteor.methods({
 	bereit(gruppenName) {
 		zaehle = Gruppen.find({"Gruppe" : gruppenName, "ready" : false}).count();
 		anzahl = Gruppen.find({"Gruppe" : gruppenName}).count();
-
+		//Teste ob alle bereit sind:
 		if(anzahl > 1 && zaehle == 0) {
+			//stelle sicher, dass alle dbs auf richtigem Stand:
 			Tags.remove({"Gruppe": gruppenName});
-			//zufällige Bilder auswählen:
 			if (TempBilder.find({"Gruppe" : gruppenName}).count() == 0) {
 				TempBilder.insert({"Gruppe": gruppenName, auswahl : false , route1 : false, route2 : false, route3 : false, score : 0, round : 0});	
 			} else {
 				id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
-				TempBilder.update({_id : id}, {$set: { route2 : false } });
+				TempBilder.update({_id : id}, {$set: { route2 : false } });	
 				TempBilder.update({_id : id}, {$set: { route3 : false } });
 				TempBilder.update({_id : id}, {$set: {auswahl : false } });
 				if (TempBilder.find({_id : id, round: {$gt: 4 }}).count() > 0 ){
 					TempBilder.update({_id : id}, {$set: {round : 0 } });
 				}
-			}			
+			}
+			//wähle zufällige Bilder:			
 			id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
 			pics = randBilder();
 			TempBilder.update({_id : id}, {$set: { Bild0 : pics[0]._id} });
@@ -76,13 +77,15 @@ Meteor.methods({
 			TempBilder.update({_id : id}, {$set: { Bild7 : pics[7]._id} });
 			//tager auswählen:
 			rand = randNumber(0,anzahl-1);
-			console.log(rand);
 			grpid = Gruppen.find({"Gruppe" : gruppenName}).fetch({_id:1})[rand]._id;
 			Gruppen.update({_id : grpid}, {$set: {tager: true}});
+			while (!(Gruppen.find({_id : grpid, tager : true}).count() >0) ) {
+
+			}
 			//richtiges Bild auswählen:
 			rand = randNumber(0,7);
-			console.log(rand);
 			TempBilder.update({_id : id}, {$set: {richtig : pics[rand]._id} });
+			//sorge für Weiterleitung:
 			TempBilder.update({_id : id}, {$set: { route1 : true} });		
 			console.log("bereit fertig");
 		}
@@ -90,32 +93,27 @@ Meteor.methods({
 	},
 
 	auswaehlen(wahl,gruppenName) {
+		console.log("alle");
 		//Sobald jemand ein Bild auswählt wird verhindert, dass sofort weitergeroutet wird:
-		console.log("start");
 		id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
 		TempBilder.update({_id : id}, {$set: { route1 : false } });
-		console.log("updated");
 
 		zaehle = Gruppen.find({"Gruppe" : gruppenName, "auswahl" : wahl}).count();
-		console.log(zaehle);
 		anzahl = Gruppen.find({"Gruppe" : gruppenName}).count() - 1;
-		console.log(anzahl);
+
 		id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
 		runde = TempBilder.findOne({_id : id}).round;
 		punkte = TempBilder.findOne({_id : id}).score;
 
 		if (zaehle == anzahl) {
-			console.log("alle haben gewählt");
 			zeiger = TempBilder.findOne({"Gruppe" : gruppenName});
 			if (TempBilder.find({"Gruppe" : gruppenName, richtig : wahl}).count() > 0) {
 				TempBilder.update({_id : id}, {$set: { auswahl : true } });
 				if (punkte == TempBilder.findOne({_id : id}).score) {
 					TempBilder.update({_id : id}, {$inc: { score : 1 } });
-					console.log("richtig");
+
 				}
 			}
-			console.log(wahl);
-			console.log(zeiger.richtig);
 			if (runde == TempBilder.findOne({_id : id}).round) {
 				TempBilder.update({_id : id}, {$inc: { round : 1 } });
 			}
