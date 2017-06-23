@@ -57,12 +57,12 @@ Template.userList.events({
 	'click .user_online_einladen': function(event){
 	//verhindert neu laden der seite
     event.preventDefault();
-    var getnam= event.target.name;
-    console.log(getnam);
+    //var getnam= event.target.name;
+    //console.log(getnam);
 
 	var getUser = event.target.value;
 	var now = f_meineGruppe();
-	console.log (Meteor.call('useridzuruck', getUser));
+	console.log (getUser);
 	Gruppen.insert({
 		Gruppe:now,
 		nutzer: getUser,
