@@ -8,7 +8,7 @@ import { Gruppen } from '../imports/api/messages.js';
 import { TempBilder } from '../imports/api/messages.js';
 import { BilderLokal } from '../imports/api/messages.js';
 import '../imports/api/messages.js';
-
+import '../imports/api/miniGame.js';
 
 // Hilfsfunktionen:
 
@@ -42,6 +42,13 @@ function randBilder(){
 };
 
 Meteor.methods({
+	clearRound(gruppenName) {
+		if (Gruppen.find({"Gruppe": gruppenName, route: true}).count() == Gruppen.find({"Gruppe": gruppenName}).count()) {
+			id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
+			TempBilder.update({_id : id}, {$set: { route2 : false} });		
+		}
+	},
+	
 	insertTag(gruppenName,tag) {
 		Tags.insert({"Gruppe": gruppenName, Tag: tag});
 	},
@@ -53,7 +60,9 @@ Meteor.methods({
 		if(anzahl > 1 && zaehle == 0) {
 			//stelle sicher, dass alle dbs auf richtigem Stand:
 			Tags.remove({"Gruppe": gruppenName});
-			if (TempBilder.find({"Gruppe" : gruppenName}).count() == 0) {
+			TempBilder.remove({});
+			TempBilder.insert({"Gruppe": gruppenName, auswahl : false , route1 : false, route2 : false, route3 : false, score : 0, round : 0});	
+/**			if (TempBilder.find({"Gruppe" : gruppenName}).count() == 0) {
 				TempBilder.insert({"Gruppe": gruppenName, auswahl : false , route1 : false, route2 : false, route3 : false, score : 0, round : 0});	
 			} else {
 				id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
@@ -63,7 +72,7 @@ Meteor.methods({
 				if (TempBilder.find({_id : id, round: {$gt: 4 }}).count() > 0 ){
 					TempBilder.update({_id : id}, {$set: {round : 0 } });
 				}
-			}
+			}*/
 			//wähle zufällige Bilder:			
 			id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
 			pics = randBilder();
@@ -117,12 +126,8 @@ Meteor.methods({
 			if (runde == TempBilder.findOne({_id : id}).round) {
 				TempBilder.update({_id : id}, {$inc: { round : 1 } });
 			}
-			if (TempBilder.findOne().round >= 4) {
-				TempBilder.update({_id : id}, {$set: { route3 : true } });
-			} else {
-				TempBilder.update({_id : id}, {$set: { route2 : true } });
-
-			}
+			TempBilder.update({_id : id}, {$set: { route2 : true } });
+			
 		}
 		return true;
 	}
