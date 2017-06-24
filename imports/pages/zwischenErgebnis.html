@@ -1,19 +1,24 @@
 <template name="zwischenErgebnis">
 	{{clearRound}}
-	<h13> Gruppe:  {{gruppeFinden}}</h13>
+<!--	<div id="steuerung" class="picGallery">
+	{{> miniGame}}	
+	</div>
+-->	<h2> Gruppe:  <b>{{gruppeFinden}}</b></h2>
 	<br>
-	<h14> Score: {{scoreFinden}}</h14>
+	<h2> Score: <b>{{scoreFinden}}</b></h2>
 	<br> 
-	<h15> <!-- Runde {{rundenGespielt}} von 4 </h15> -->
+	<!-- Runde {{rundenGespielt}} von 4 </h15> -->
 	<br>
-	<h16> Das ausgewählte Bild war: {{bildRichtig}} </h16>
+	<h2> Das ausgewählte Bild war: {{bildRichtig}} </h2>
 	<br>
-	<h17>Richtiges Bild:</h17>
+	<h2>Richtiges Bild:</h2>
 	{{#with showPicRichtig}}
-	<img id="{{_id}}" class="bild" src="{{Url}}" style=" border: 10px double; border-color: grey; height: 400px; width: 400px" >
-	{{/with}}
+	<div id="zweite_spalte">
+	<img id="{{_id}}" class="bild_" src="{{Url}}" style=" border: 10px double; border-color: grey; height: 400px; width: 400px" >
+	</div>
+		{{/with}}
 	<br>
-	<h18>Tags:</h18>
+	<h5>Tags:</h5>
 	<br>
 	{{#each findTags}}
   		{{Tag}}, 
