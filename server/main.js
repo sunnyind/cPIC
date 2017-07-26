@@ -7,6 +7,9 @@ import { Messages } from '../imports/api/messages.js';
 import { Gruppen } from '../imports/api/messages.js';
 import { TempBilder } from '../imports/api/messages.js';
 import { BilderLokal } from '../imports/api/messages.js';
+import { FalscheBilder } from '../imports/api/messages.js';
+import { AndereBilder } from '../imports/api/messages.js';
+
 import '../imports/api/messages.js';
 import '../imports/api/miniGame.js';
 
@@ -60,19 +63,28 @@ Meteor.methods({
 		if(anzahl > 1 && zaehle == 0) {
 			//stelle sicher, dass alle dbs auf richtigem Stand:
 			Tags.remove({"Gruppe": gruppenName});
+/** nur eine Runde:
 			TempBilder.remove({});
-			TempBilder.insert({"Gruppe": gruppenName, auswahl : false , route1 : false, route2 : false, route3 : false, score : 0, round : 0});	
-/**			if (TempBilder.find({"Gruppe" : gruppenName}).count() == 0) {
-				TempBilder.insert({"Gruppe": gruppenName, auswahl : false , route1 : false, route2 : false, route3 : false, score : 0, round : 0});	
+			TempBilder.insert({"Gruppe": gruppenName, auswahl : false , route1 : false, route2 : false, route3 : false, score : 0, round : 0, auswahlPic : ""});	
+*/
+
+		if (TempBilder.find({"Gruppe" : gruppenName}).count() == 0) {
+				TempBilder.insert({"Gruppe": gruppenName, auswahl : false , route1 : false, route2 : false, route3 : false, score : 0, round : 0, auswahlPic : ""});	
 			} else {
 				id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
+				TempBilder.update({_id : id}, {$set: { auswahl : false } });
+				TempBilder.update({_id : id}, {$set: { route1 : false } });	
 				TempBilder.update({_id : id}, {$set: { route2 : false } });	
 				TempBilder.update({_id : id}, {$set: { route3 : false } });
-				TempBilder.update({_id : id}, {$set: {auswahl : false } });
+				TempBilder.update({_id : id}, {$inc: { round : 1 } });
+				TempBilder.update({_id : id}, {$set: { auswahlPic : "" } });
+				
+/**  4 Runden:
 				if (TempBilder.find({_id : id, round: {$gt: 4 }}).count() > 0 ){
 					TempBilder.update({_id : id}, {$set: {round : 0 } });
-				}
-			}*/
+				} 
+*/
+			}
 			//wähle zufällige Bilder:			
 			id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
 			pics = randBilder();
@@ -116,6 +128,7 @@ Meteor.methods({
 
 		if (zaehle == anzahl) {
 			zeiger = TempBilder.findOne({"Gruppe" : gruppenName});
+			TempBilder.update({_id : id}, {$set: { auswahlPic : wahl}})
 			if (TempBilder.find({"Gruppe" : gruppenName, richtig : wahl}).count() > 0) {
 				TempBilder.update({_id : id}, {$set: { auswahl : true } });
 				if (punkte == TempBilder.findOne({_id : id}).score) {
@@ -130,6 +143,14 @@ Meteor.methods({
 			
 		}
 		return true;
+	},
+
+	falsch(gruppenName,bildName) {
+		if (FalscheBilder.find({"Gruppe" : gruppenName, "Bild" : bildName}).count() == 0) {
+			FalscheBilder.insert({"Gruppe" : gruppenName, "Bild" : bildName});
+		} else {
+			FalscheBilder.remove({"Gruppe" : gruppenName, "Bild" : bildName});
+		}
 	}
 });
 
@@ -197,6 +218,10 @@ Meteor.publish("bilder",function() {
 
 Meteor.publish("tagsBild", function(gruppenName) {
 	return Tags.find({"Gruppe": gruppenName})
+});
+
+Meteor.publish("falscheBilder", function(gruppenName) {
+	return FalscheBilder.find({"Gruppe": gruppenName})
 });
 
 Meteor.startup(() => {

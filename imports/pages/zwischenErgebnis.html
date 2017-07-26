@@ -11,12 +11,18 @@
 	<br>
 	<h2> Das ausgewählte Bild war: {{bildRichtig}} </h2>
 	<br>
+	<h2> Ausgewähltes Bild:</h2>
+	{{#with showPicAuswahl}}
+		<div id="zweite_spalte">
+			<img id="{{_id}}" class="bild_" src="{{Url}}" style=" border: 10px double; border-color: grey; height: 400px; width: 400px" >
+		</div>
+	{{/with}}
 	<h2>Richtiges Bild:</h2>
 	{{#with showPicRichtig}}
-	<div id="zweite_spalte">
-	<img id="{{_id}}" class="bild_" src="{{Url}}" style=" border: 10px double; border-color: grey; height: 400px; width: 400px" >
-	</div>
-		{{/with}}
+		<div id="zweite_spalte">
+			<img id="{{_id}}" class="bild_" src="{{Url}}" style=" border: 10px double; border-color: grey; height: 400px; width: 400px" >
+		</div>
+	{{/with}}
 	<br>
 	<h5>Tags:</h5>
 	<br>
@@ -26,6 +32,10 @@
 	<br>
 	<form class="rdy" style=" background-color: grey; ">
     	<button type="submit"> Bereit</button>
+    </form>
+
+    <form class="weiter" style=" background-color: grey; ">
+    	<button type="submit"> Nächste Runde</button>
     </form>
 
 </template>

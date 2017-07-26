@@ -19,6 +19,7 @@ import { TempBilder } from '../imports/api/messages.js';
 import { Bilder } from '../imports/api/messages.js';
 import { Tags } from '../imports/api/messages.js'
 import { BilderLokal } from '../imports/api/messages.js';
+import { FalscheBilder } from '../imports/api/messages.js';
 
 //vpn Sunny
 import '../imports/api/miniGame.js';
@@ -148,16 +149,19 @@ Template.newgrouptemp.events({
 							id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;	
 							Gruppen.update({ _id :id}, {$set: {route : false}});	
 							Gruppen.update({ _id :id}, {$set: {ready : false}});
-							FlowRouter.go('spielTager');
+						/**	location.replace('spielTager'); */
+							FlowRouter.go('spielTager');  
 						} else {
 							id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;	
 							Gruppen.update({ _id :id}, {$set: {route : false}});	
 							Gruppen.update({ _id :id}, {$set: {ready : false}});
-							FlowRouter.go('spiel');
+						/**	location.replace('spiel'); */ 
+							FlowRouter.go('spiel'); 
 						}
 					}	else if (TempBilder.findOne().route2) {
 						Gruppen.update({ _id :id}, {$set: {route : false}});
-						FlowRouter.go('Ergebnis');						
+					/**	location.replace('Ergebnis'); */
+						FlowRouter.go('Ergebnis'); 						
 					}	else if (TempBilder.findOne().route3) {
 						Gruppen.update({ _id :id}, {$set: {route : false}});
 						FlowRouter.go('start');
@@ -170,16 +174,19 @@ Template.newgrouptemp.events({
 							id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;
 							Gruppen.update({ _id :id}, {$set: {route : false}});		
 							Gruppen.update({ _id :id}, {$set: {ready : false}});
-							FlowRouter.go('spielTager');
+						/**	location.replace('spielTager'); */ 
+							FlowRouter.go('spielTager');  
 						} else {
 							id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;		
 							Gruppen.update({ _id :id}, {$set: {ready : false}});
 							Gruppen.update({ _id :id}, {$set: {route : false}});
-							FlowRouter.go('spiel');
+						/**	location.replace('spiel'); */
+							FlowRouter.go('spiel'); 
 						}
 					}	else if (TempBilder.findOne().route2) {
 						Gruppen.update({ _id :id}, {$set: {route : false}});
-						FlowRouter.go('Ergebnis');					
+					/**	location.replace('Ergebnis'); */
+						FlowRouter.go('Ergebnis'); 					
 					}	else if (TempBilder.findOne().route3) {
 						FlowRouter.go('start');
 					}		
@@ -257,7 +264,40 @@ Template.raten.helpers({
 })
 
 Template.raten.events({
-	'click .bild': function(event){
+	'click .bild': function(event) {
+		event.preventDefault();
+		x = document.getElementById(this._id);
+
+		queryWrong = FalscheBilder.find();
+		Tracker.autorun(() => {
+			const resultFalsch = Meteor.apply('falsch', [f_meineGruppe(), this._id],{
+				onResultReceived: function() {
+					handler = Meteor.subscribe('falscheBilder',f_meineGruppe(), {
+					});
+				}
+			});
+		});
+		const handleWrong = queryWrong.observeChanges({
+				changed: function(id, fields) {
+					if (x.style.borderColor != "blue") {
+						x.style.borderColor = "red";
+					}
+				},
+				added: function(id, fields) {
+					if (x.style.borderColor != "blue") {
+						x.style.borderColor = "red";
+					}
+				},
+				removed: function(id) {
+					if (x.style.borderColor != "blue") {
+						x.style.borderColor = "grey";
+					}
+				},
+			});
+
+	},
+
+	'dblclick .bild': function(event){
 		event.preventDefault();
 		x = document.getElementById(this._id);
 		y = document.getElementsByClassName("bild");
@@ -278,12 +318,14 @@ Template.raten.events({
 			const result = Meteor.apply('auswaehlen', [this._id, f_meineGruppe()],{
 				onResultReceived: function() {
 					handler = Meteor.subscribe('spielStart',f_meineGruppe(), {
-			
 					});
 				}
 			});
 		});
-	}	 
+	},
+
+	
+
 })
 
 Template.taggen.helpers({
@@ -342,6 +384,13 @@ Template.zwischenErgebnis.helpers({
 		}
 	},
 
+	showPicAuswahl: function() {
+		zeiger1 = TempBilder.findOne();
+		auswahl = BilderLokal.findOne({_id : zeiger.auswahlPic });
+		return {id : zeiger.auswahlPic, "Url" : auswahl.Url };
+
+	},
+
 	showPicRichtig: function() {
 		zeiger = TempBilder.findOne();
 		pic = BilderLokal.findOne({_id : zeiger.richtig});
@@ -363,7 +412,6 @@ Template.zwischenErgebnis.events({
 		name = f_meineGruppe();
 		Gruppen.update({_id: id}, {$set: {"Gruppe": name, nutzer: Meteor.user().username,ready: false, tager: false,auswahl: ""}});
 		location.replace('start');
-		FlowRouter.go('start');
 /**		id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;
 		btn = document.getElementsByClassName("rdy");
 		ready = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":0, "ready": 1})[0].ready;
@@ -386,5 +434,31 @@ Template.zwischenErgebnis.events({
 			});
 
 		}*/
+	},
+
+	'submit .weiter'(event) {
+		event.preventDefault();
+		id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;
+		btn = document.getElementsByClassName("rdy");
+		ready = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":0, "ready": 1})[0].ready;
+		if (ready) {
+			Gruppen.update({ _id :id}, {$set: {ready : false}});
+			btn[0].style.backgroundColor = "grey";
+		} else {
+			Gruppen.update({ _id : id}, {$set: {ready : true}});
+			btn[0].style.backgroundColor = "green";
+			console.log("test1");
+
+			Tracker.autorun(() => {
+				handler = Meteor.subscribe('spielStart',f_meineGruppe());
+				if (handler.ready()) {
+					console.log("ready");
+					const result = Meteor.call('bereit', f_meineGruppe());
+				}
+				console.log("test");
+			});
+
+		}
+
 	},
 })
