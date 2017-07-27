@@ -13,6 +13,7 @@ import { AndereBilder } from '../imports/api/messages.js';
 import '../imports/api/messages.js';
 import '../imports/api/miniGame.js';
 
+
 // Hilfsfunktionen:
 
 //Zufallszahlen erzeugen:
@@ -46,10 +47,11 @@ function randBilder(){
 
 Meteor.methods({
 	clearRound(gruppenName) {
-		if (Gruppen.find({"Gruppe": gruppenName, route: true}).count() == Gruppen.find({"Gruppe": gruppenName}).count()) {
+		if (Gruppen.find({"Gruppe": gruppenName, route31: true}).count() == Gruppen.find({"Gruppe": gruppenName}).count()) {
 			id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
-			TempBilder.update({_id : id}, {$set: { route2 : false} });		
+			TempBilder.update({_id : id}, {$set: { route2 : false} });
 		}
+		FalscheBilder.remove({"Gruppe" : gruppenName});
 	},
 	
 	insertTag(gruppenName,tag) {
@@ -57,8 +59,8 @@ Meteor.methods({
 	},
 
 	bereit(gruppenName) {
-		zaehle = Gruppen.find({"Gruppe" : gruppenName, "ready" : false}).count();
-		anzahl = Gruppen.find({"Gruppe" : gruppenName}).count();
+		var zaehle = Gruppen.find({"Gruppe" : gruppenName, "ready" : false}).count();
+		var anzahl = Gruppen.find({"Gruppe" : gruppenName}).count();
 		//Teste ob alle bereit sind:
 		if(anzahl > 1 && zaehle == 0) {
 			//stelle sicher, dass alle dbs auf richtigem Stand:
@@ -67,17 +69,18 @@ Meteor.methods({
 			TempBilder.remove({});
 			TempBilder.insert({"Gruppe": gruppenName, auswahl : false , route1 : false, route2 : false, route3 : false, score : 0, round : 0, auswahlPic : ""});	
 */
-
+		//neue Runde vorbereiten  bzw. nächste Runde vorbereiten
 		if (TempBilder.find({"Gruppe" : gruppenName}).count() == 0) {
-				TempBilder.insert({"Gruppe": gruppenName, auswahl : false , route1 : false, route2 : false, route3 : false, score : 0, round : 0, auswahlPic : ""});	
+				TempBilder.insert({"Gruppe": gruppenName, auswahl : false , route1 : false, route2 : false, clear : false, score : 0, round : 1, auswahlPic : "", scoreInc : false});	
 			} else {
 				id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
+				TempBilder.update({_id : id}, {$set: { clear : false } });
 				TempBilder.update({_id : id}, {$set: { auswahl : false } });
 				TempBilder.update({_id : id}, {$set: { route1 : false } });	
 				TempBilder.update({_id : id}, {$set: { route2 : false } });	
-				TempBilder.update({_id : id}, {$set: { route3 : false } });
 				TempBilder.update({_id : id}, {$inc: { round : 1 } });
 				TempBilder.update({_id : id}, {$set: { auswahlPic : "" } });
+				TempBilder.update({_id : id}, {$set: { scoreInc : false } });
 				
 /**  4 Runden:
 				if (TempBilder.find({_id : id, round: {$gt: 4 }}).count() > 0 ){
@@ -107,16 +110,17 @@ Meteor.methods({
 			rand = randNumber(0,7);
 			TempBilder.update({_id : id}, {$set: {richtig : pics[rand]._id} });
 			//sorge für Weiterleitung:
-			TempBilder.update({_id : id}, {$set: { route1 : true} });		
+			TempBilder.update({_id : id}, {$set: { route1 : true} });
 			console.log("bereit fertig");
+			TempBilder.update({_id : id}, {$set: { clear : true } });
 		}
 		
 	},
 
 	auswaehlen(wahl,gruppenName) {
-		console.log("alle");
 		//Sobald jemand ein Bild auswählt wird verhindert, dass sofort weitergeroutet wird:
 		id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
+		TempBilder.update({_id : id}, {$set: { clear : false } });
 		TempBilder.update({_id : id}, {$set: { route1 : false } });
 
 		zaehle = Gruppen.find({"Gruppe" : gruppenName, "auswahl" : wahl}).count();
@@ -124,24 +128,21 @@ Meteor.methods({
 
 		id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
 		runde = TempBilder.findOne({_id : id}).round;
-		punkte = TempBilder.findOne({_id : id}).score;
 
 		if (zaehle == anzahl) {
 			zeiger = TempBilder.findOne({"Gruppe" : gruppenName});
 			TempBilder.update({_id : id}, {$set: { auswahlPic : wahl}})
 			if (TempBilder.find({"Gruppe" : gruppenName, richtig : wahl}).count() > 0) {
 				TempBilder.update({_id : id}, {$set: { auswahl : true } });
-				if (punkte == TempBilder.findOne({_id : id}).score) {
+				if (!TempBilder.find({"Gruppe": gruppenName}).fetch({_id : 0, scoreInc : 1})[0].scoreInc) {
+					TempBilder.update({_id : id}, {$set: { scoreInc : true } });					
 					TempBilder.update({_id : id}, {$inc: { score : 1 } });
-
 				}
-			}
-			if (runde == TempBilder.findOne({_id : id}).round) {
-				TempBilder.update({_id : id}, {$inc: { round : 1 } });
 			}
 			TempBilder.update({_id : id}, {$set: { route2 : true } });
 			
 		}
+		TempBilder.update({_id : id}, {$set: { clear : true } });
 		return true;
 	},
 
@@ -151,6 +152,7 @@ Meteor.methods({
 		} else {
 			FalscheBilder.remove({"Gruppe" : gruppenName, "Bild" : bildName});
 		}
+		return true;
 	}
 });
 

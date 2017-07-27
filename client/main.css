@@ -131,6 +131,9 @@ h6{
 .bild{
   border: 10px double;
   border-color: black;
+  outline-style: double;
+  outline-width: 5px;
+  outline-color: black; 
   height: 200px; 
   width: 200px;
   padding: 5px;

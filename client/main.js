@@ -79,7 +79,7 @@ Template.userList.events({
 		nutzer: getUser,
 		ready: false,
 		tager: false,
-		route: false,
+		route31: false,
 		auswahl: "",
 	});
 	return false;
@@ -110,7 +110,7 @@ Template.newgrouptemp.events({
 			nutzer: Meteor.user().username,
 			ready: false,
 			tager: false,
-			route: false,
+			route31: false,
 			auswahl: "", 
 		})
 
@@ -140,56 +140,54 @@ Template.newgrouptemp.events({
 			});
 			const handle = query.observeChanges({
 				changed: function(id, fields) {
-					console.log("changed");
-					if (TempBilder.findOne().route1) {
-						console.log(Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":0,tager:1})[0].tager);
-						console.log(Gruppen.findOne({"nutzer": Meteor.user().username}).tager);
-						console.log(Meteor.user().username);
-						if (Gruppen.find({"nutzer": Meteor.user().username, "tager" : true}).count() > 0 ) {
-							id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;	
-							Gruppen.update({ _id :id}, {$set: {route : false}});	
-							Gruppen.update({ _id :id}, {$set: {ready : false}});
-						/**	location.replace('spielTager'); */
-							FlowRouter.go('spielTager');  
-						} else {
-							id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;	
-							Gruppen.update({ _id :id}, {$set: {route : false}});	
-							Gruppen.update({ _id :id}, {$set: {ready : false}});
-						/**	location.replace('spiel'); */ 
-							FlowRouter.go('spiel'); 
+					if (TempBilder.findOne().clear) {
+						console.log("changed");
+						if (TempBilder.findOne().route1) {
+							if (Gruppen.findOne({"nutzer": Meteor.user().username}).tager ) {
+								id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;	
+								Gruppen.update({ _id :id}, {$set: {route31 : false}});	
+								Gruppen.update({ _id :id}, {$set: {ready : false}});
+							/**	location.replace('spielTager'); */
+								FlowRouter.go('spielTager');
+							} else {
+								id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;	
+								Gruppen.update({ _id :id}, {$set: {route31 : false}});	
+								Gruppen.update({ _id :id}, {$set: {ready : false}});
+							/**	location.replace('spiel'); */ 
+								FlowRouter.go('spiel'); 
+							}
+						}	else if (TempBilder.findOne().route2) {
+						/**	location.replace('Ergebnis'); */
+							id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;
+							Gruppen.update({ _id :id}, {$set: {route31 : true}});
+							FlowRouter.go('Ergebnis'); 						
 						}
-					}	else if (TempBilder.findOne().route2) {
-						Gruppen.update({ _id :id}, {$set: {route : false}});
-					/**	location.replace('Ergebnis'); */
-						FlowRouter.go('Ergebnis'); 						
-					}	else if (TempBilder.findOne().route3) {
-						Gruppen.update({ _id :id}, {$set: {route : false}});
-						FlowRouter.go('start');
 					}	
 				},
 				added: function(id, fields) {
 					console.log("added");
-					if (TempBilder.findOne().route1) {
-						if (Gruppen.findOne({"nutzer": Meteor.user().username}).tager) {
+					if (TempBilder.findOne().clear) {
+						if (TempBilder.findOne().route1) {
+							if (Gruppen.findOne({"nutzer": Meteor.user().username}).tager) {
+								id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;
+								Gruppen.update({ _id :id}, {$set: {route31 : false}});		
+								Gruppen.update({ _id :id}, {$set: {ready : false}});
+							/**	location.replace('spielTager'); */ 
+								FlowRouter.go('spielTager');  
+							} else {
+								id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;		
+								Gruppen.update({ _id :id}, {$set: {ready : false}});
+								Gruppen.update({ _id :id}, {$set: {route31 : false}});
+							/**	location.replace('spiel'); */
+								FlowRouter.go('spiel'); 
+							}
+						}	else if (TempBilder.findOne().route2) {
 							id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;
-							Gruppen.update({ _id :id}, {$set: {route : false}});		
-							Gruppen.update({ _id :id}, {$set: {ready : false}});
-						/**	location.replace('spielTager'); */ 
-							FlowRouter.go('spielTager');  
-						} else {
-							id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;		
-							Gruppen.update({ _id :id}, {$set: {ready : false}});
-							Gruppen.update({ _id :id}, {$set: {route : false}});
-						/**	location.replace('spiel'); */
-							FlowRouter.go('spiel'); 
-						}
-					}	else if (TempBilder.findOne().route2) {
-						Gruppen.update({ _id :id}, {$set: {route : false}});
-					/**	location.replace('Ergebnis'); */
-						FlowRouter.go('Ergebnis'); 					
-					}	else if (TempBilder.findOne().route3) {
-						FlowRouter.go('start');
-					}		
+							Gruppen.update({ _id :id}, {$set: {route31 : false}});
+						/**	location.replace('Ergebnis'); */
+							FlowRouter.go('Ergebnis'); 					
+						}	
+					}
 				}
 			});
 		}
@@ -257,10 +255,56 @@ Template.raten.helpers({
 		merke.insert({_id : zeiger.Bild7,"Url" :pic.Url, "Nummer" : "7" });
 
 		return merke.find();
+	},
+
+		subscriben: function() {
+
+		handler = Meteor.subscribe('falscheBilder',f_meineGruppe());
+		queryWrong = FalscheBilder.find();
+		console.log("subscribe");
+		const handleWrong = queryWrong.observeChanges({
+				changed: function(id, fields) {
+					zeiger = FalscheBilder.find().fetch({"_id" : 0, "Bild" :1});
+					for (var i = 0; i < zeiger.length; i++) {
+						x = document.getElementById(zeiger[i].Bild);
+						x.style.outlineColor = "red";
+					}
+				},
+				added: function(id, fields) {
+					console.log("1");
+					zeiger = FalscheBilder.find().fetch({"_id" : 0, "Bild" :1});
+					console.log(zeiger);
+					for (var i = 0; i < zeiger.length; i++) {
+						x = document.getElementById(zeiger[i].Bild);
+						console.log(x.style.outlineColor);
+						x.style.outlineColor = "red";
+					}
+				},
+				removed: function(id) {
+					test = false;
+					zeiger = FalscheBilder.find().fetch({"_id" : 0, "Bild" :1});
+					y = document.getElementsByClassName("bild");
+					for (j=0; j< y.length; j++) {
+						if (y[j].style.outlineColor == "red") {
+							for (var i = 0; i < zeiger.length; i++) {
+								console.log(y[j].id);
+								console.log(zeiger[i].Bild);
+								if(y[j].id == zeiger[i].Bild) {
+									test = true;
+								}
+							}
+							if (!test) {
+								y[j].style.outlineColor = "black";
+							} else {
+								test = false
+							}
+
+						}
+					}
+				},
+			});
+		console.log("fertig");
 	}
-
-
-
 })
 
 Template.raten.events({
@@ -270,30 +314,9 @@ Template.raten.events({
 
 		queryWrong = FalscheBilder.find();
 		Tracker.autorun(() => {
-			const resultFalsch = Meteor.apply('falsch', [f_meineGruppe(), this._id],{
-				onResultReceived: function() {
-					handler = Meteor.subscribe('falscheBilder',f_meineGruppe(), {
-					});
-				}
-			});
+			const resultFalsch = Meteor.apply('falsch', [f_meineGruppe(), this._id]);
 		});
-		const handleWrong = queryWrong.observeChanges({
-				changed: function(id, fields) {
-					if (x.style.borderColor != "blue") {
-						x.style.borderColor = "red";
-					}
-				},
-				added: function(id, fields) {
-					if (x.style.borderColor != "blue") {
-						x.style.borderColor = "red";
-					}
-				},
-				removed: function(id) {
-					if (x.style.borderColor != "blue") {
-						x.style.borderColor = "grey";
-					}
-				},
-			});
+
 
 	},
 
@@ -304,9 +327,10 @@ Template.raten.events({
 		//entfernt die Markierung von anderen Bildern (falls vorhanden)
 		for (i=0; i< y.length; i++) {
 			if (y[i].style.borderColor== "blue") {
-				y[i].style.borderColor= "grey";
+				y[i].style.borderColor= "black";
 			}
 		}
+		x.style.outlineColor = "black";
 		//markiert ausgewähltes Bild
 		x.style.borderColor = "blue";
 		//sagt dem Server welches Bild ausgewählt wurde
@@ -337,10 +361,10 @@ Template.taggen.helpers({
 	showPic: function() {
 		id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;
 		Gruppen.update({ _id : id}, {$set: {ready : false }});
-		Gruppen.update({ _id : id}, {$set: {tager : false }});
 
 		zeiger = TempBilder.findOne();
 		pic = BilderLokal.findOne({_id : zeiger.richtig});
+		console.log(zeiger.route2);
 		return {id : zeiger.richtig,"Url" :pic.Url };
 	}
 })
@@ -357,7 +381,9 @@ Template.taggen.events({
 
 Template.zwischenErgebnis.helpers({
 	clearRound: function() {
-		Gruppen.update({ _id :id}, {$set: {route : true}});
+		id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;
+		Gruppen.update({ _id : id}, {$set: {tager : false }});
+		Gruppen.update({ _id : id}, {$set: {ready : false }});
 		Meteor.call('clearRound', f_meineGruppe());
 	},
 
@@ -367,14 +393,15 @@ Template.zwischenErgebnis.helpers({
 		return f_meineGruppe();
 	},
 
+	rundeFinden:function(){
+		Meteor.subscribe('spielStart',f_meineGruppe());
+		return  TempBilder.findOne().round;
+	},
+
 	scoreFinden:function(){
 		Meteor.subscribe('spielStart',f_meineGruppe());
 		return  TempBilder.findOne().score;
 	},
-
-	rundenGespielt:function(){
-		return TempBilder.findOne().round;
-	}, 
 
 	bildRichtig: function() {
 		if(TempBilder.findOne().auswahl) {
@@ -409,40 +436,20 @@ Template.zwischenErgebnis.events({
 	'submit .rdy'(event) {
 		event.preventDefault();
 		id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;
+		Gruppen.update({ _id :id}, {$set: {route31 : false}});
 		name = f_meineGruppe();
 		Gruppen.update({_id: id}, {$set: {"Gruppe": name, nutzer: Meteor.user().username,ready: false, tager: false,auswahl: ""}});
 		location.replace('start');
-/**		id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;
-		btn = document.getElementsByClassName("rdy");
-		ready = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":0, "ready": 1})[0].ready;
-
-		if (ready) {
-			Gruppen.update({ _id :id}, {$set: {ready : false}});
-			btn[0].style.backgroundColor = "grey";
-		} else {
-			Gruppen.update({ _id : id}, {$set: {ready : true}});
-			btn[0].style.backgroundColor = "green";
-			console.log("test1");
-
-			Tracker.autorun(() => {
-				handler = Meteor.subscribe('spielStart',f_meineGruppe());
-				if (handler.ready()) {
-					console.log("ready");
-					const result = Meteor.call('bereit', f_meineGruppe());
-				}
-				console.log("test");
-			});
-
-		}*/
 	},
 
 	'submit .weiter'(event) {
 		event.preventDefault();
 		id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;
-		btn = document.getElementsByClassName("rdy");
+		btn = document.getElementsByClassName("weiter");
 		ready = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":0, "ready": 1})[0].ready;
+		Gruppen.update({ _id :id}, {$set: {route31 : false}});
 		if (ready) {
-			Gruppen.update({ _id :id}, {$set: {ready : false}});
+			Gruppen.update({ _id : id}, {$set: {ready : false}});
 			btn[0].style.backgroundColor = "grey";
 		} else {
 			Gruppen.update({ _id : id}, {$set: {ready : true}});
@@ -452,10 +459,8 @@ Template.zwischenErgebnis.events({
 			Tracker.autorun(() => {
 				handler = Meteor.subscribe('spielStart',f_meineGruppe());
 				if (handler.ready()) {
-					console.log("ready");
 					const result = Meteor.call('bereit', f_meineGruppe());
 				}
-				console.log("test");
 			});
 
 		}
