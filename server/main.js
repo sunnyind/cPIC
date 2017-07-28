@@ -51,6 +51,7 @@ Meteor.methods({
 			id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
 			TempBilder.update({_id : id}, {$set: { route2 : false} });
 		}
+		AndereBilder.remove({"Gruppe" : gruppenName});
 		FalscheBilder.remove({"Gruppe" : gruppenName});
 	},
 	
@@ -117,7 +118,13 @@ Meteor.methods({
 		
 	},
 
-	auswaehlen(wahl,gruppenName) {
+	auswaehlen(wahl,gruppenName, username) {
+		if(AndereBilder.find({"Gruppe" : gruppenName, "User" : username}).count()==0 ) {
+			AndereBilder.insert({"Gruppe" : gruppenName, "User" : username, "Bild" : wahl});
+		} else {
+			id = AndereBilder.find({"Gruppe": gruppenName, "User" : username}).fetch({_id:1})[0]._id;
+			AndereBilder.update({_id : id}, {$set: { "Bild" : wahl}});
+		}
 		//Sobald jemand ein Bild auswählt wird verhindert, dass sofort weitergeroutet wird:
 		id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
 		TempBilder.update({_id : id}, {$set: { clear : false } });
@@ -153,7 +160,7 @@ Meteor.methods({
 			FalscheBilder.remove({"Gruppe" : gruppenName, "Bild" : bildName});
 		}
 		return true;
-	}
+	},
 });
 
 Gruppen.allow({
@@ -224,6 +231,10 @@ Meteor.publish("tagsBild", function(gruppenName) {
 
 Meteor.publish("falscheBilder", function(gruppenName) {
 	return FalscheBilder.find({"Gruppe": gruppenName})
+});
+
+Meteor.publish("andereBilder", function(gruppenName) {
+	return AndereBilder.find({"Gruppe": gruppenName})
 });
 
 Meteor.startup(() => {

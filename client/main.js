@@ -20,6 +20,7 @@ import { Bilder } from '../imports/api/messages.js';
 import { Tags } from '../imports/api/messages.js'
 import { BilderLokal } from '../imports/api/messages.js';
 import { FalscheBilder } from '../imports/api/messages.js';
+import { AndereBilder } from '../imports/api/messages.js';
 
 //vpn Sunny
 import '../imports/api/miniGame.js';
@@ -257,11 +258,10 @@ Template.raten.helpers({
 		return merke.find();
 	},
 
-		subscriben: function() {
+		subscribenFalsch: function() {
 
 		handler = Meteor.subscribe('falscheBilder',f_meineGruppe());
 		queryWrong = FalscheBilder.find();
-		console.log("subscribe");
 		const handleWrong = queryWrong.observeChanges({
 				changed: function(id, fields) {
 					zeiger = FalscheBilder.find().fetch({"_id" : 0, "Bild" :1});
@@ -271,12 +271,9 @@ Template.raten.helpers({
 					}
 				},
 				added: function(id, fields) {
-					console.log("1");
 					zeiger = FalscheBilder.find().fetch({"_id" : 0, "Bild" :1});
-					console.log(zeiger);
 					for (var i = 0; i < zeiger.length; i++) {
 						x = document.getElementById(zeiger[i].Bild);
-						console.log(x.style.outlineColor);
 						x.style.outlineColor = "red";
 					}
 				},
@@ -287,8 +284,6 @@ Template.raten.helpers({
 					for (j=0; j< y.length; j++) {
 						if (y[j].style.outlineColor == "red") {
 							for (var i = 0; i < zeiger.length; i++) {
-								console.log(y[j].id);
-								console.log(zeiger[i].Bild);
 								if(y[j].id == zeiger[i].Bild) {
 									test = true;
 								}
@@ -303,7 +298,32 @@ Template.raten.helpers({
 					}
 				},
 			});
-		console.log("fertig");
+	},
+
+	subscribenAndere: function() {
+		handler = Meteor.subscribe('andereBilder',f_meineGruppe());
+		queryAndere = AndereBilder.find();
+		console.log("subscribe");
+		const handlerAndere = queryAndere.observeChanges({
+				changed: function(id, fields) {
+					zeigerAndere = AndereBilder.find().fetch({"_id" : 0, "User" : 1, "Bild" : 1});
+					for (var i = 0; i < zeigerAndere.length; i++) {
+						if (zeigerAndere[i].User !=  Meteor.user().username ) {
+							x = document.getElementById(zeigerAndere[i].Bild);
+							x.style.borderColor = "yellow";
+						}
+					}
+				},
+				added: function(id, fields) {
+					zeigerAndere = AndereBilder.find().fetch({"_id" : 0, "User" : 1, "Bild" : 1});
+					for (var i = 0; i < zeigerAndere.length; i++) {
+						if (zeigerAndere[i].User !=  Meteor.user().username ) {
+							x = document.getElementById(zeigerAndere[i].Bild);
+							x.style.borderColor = "yellow";
+						}
+					}
+				},
+			});
 	}
 })
 
@@ -339,7 +359,7 @@ Template.raten.events({
 		Gruppen.update({ _id : id}, {$set: {auswahl : this._id}});
 
 		Tracker.autorun(() => {
-			const result = Meteor.apply('auswaehlen', [this._id, f_meineGruppe()],{
+			const result = Meteor.apply('auswaehlen', [this._id, f_meineGruppe(), Meteor.user().username],{
 				onResultReceived: function() {
 					handler = Meteor.subscribe('spielStart',f_meineGruppe(), {
 					});
