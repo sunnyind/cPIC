@@ -9,6 +9,7 @@ import { TempBilder } from '../imports/api/messages.js';
 import { BilderLokal } from '../imports/api/messages.js';
 import { FalscheBilder } from '../imports/api/messages.js';
 import { AndereBilder } from '../imports/api/messages.js';
+import { BilderTags } from '../imports/api/messages.js';
 
 import '../imports/api/messages.js';
 import '../imports/api/miniGame.js';
@@ -50,6 +51,16 @@ Meteor.methods({
 		if (Gruppen.find({"Gruppe": gruppenName, route31: true}).count() == Gruppen.find({"Gruppe": gruppenName}).count()) {
 			id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
 			TempBilder.update({_id : id}, {$set: { route2 : false} });
+			if (TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1,auswahl:1})[0].auswahl) {
+				bild = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:0,richtig:1})[0].richtig;
+				zeiger = Tags.find({"Gruppe" : gruppenName}).fetch();
+				for (i = 0; i < zeiger.length; i++) {
+					if (BilderTags.find({"Bild" : bild, "Tag" : zeiger[i].Tag}).count() == 0) {
+						BilderTags.insert({"Bild" : bild, "Tag" : zeiger[i].Tag});
+					}
+				}
+			}
+
 		}
 		AndereBilder.remove({"Gruppe" : gruppenName});
 		FalscheBilder.remove({"Gruppe" : gruppenName});
@@ -123,7 +134,10 @@ Meteor.methods({
 			AndereBilder.insert({"Gruppe" : gruppenName, "User" : username, "Bild" : wahl});
 		} else {
 			id = AndereBilder.find({"Gruppe": gruppenName, "User" : username}).fetch({_id:1})[0]._id;
+			console.log(id);
+			console.log(wahl);
 			AndereBilder.update({_id : id}, {$set: { "Bild" : wahl}});
+
 		}
 		//Sobald jemand ein Bild auswählt wird verhindert, dass sofort weitergeroutet wird:
 		id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;

@@ -7,3 +7,4 @@ export const Tags = new Mongo.Collection('tags');
 export const BilderLokal = new Mongo.Collection('bilderLokal');
 export const FalscheBilder = new Mongo.Collection('falscheBilder');
 export const AndereBilder = new Mongo.Collection('andereBilder');
+export const BilderTags = new Mongo.Collection('bilderTags');

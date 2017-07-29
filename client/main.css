@@ -129,9 +129,9 @@ h6{
 }*/
 
 .bild{
-  border: 10px double;
+  border: 10px solid;
   border-color: black;
-  outline-style: double;
+  outline-style: solid;
   outline-width: 5px;
   outline-color: black; 
   height: 200px; 

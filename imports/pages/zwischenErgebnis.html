@@ -10,15 +10,21 @@
 	<h2> Score: <b>{{scoreFinden}}</b></h2>
 	<br> 
 	<!-- Runde {{rundenGespielt}} von 4 </h15> -->
-	<br>
-	<h2> Das ausgewählte Bild war: {{bildRichtig}} </h2>
-	<br>
-	<h2> Ausgewähltes Bild:</h2>
-	{{#with showPicAuswahl}}
-		<div id="zweite_spalte">
-			<img id="{{_id}}" class="bild_" src="{{Url}}" style=" border: 10px double; border-color: grey; height: 400px; width: 400px" >
-		</div>
-	{{/with}}
+	{{#unless bildRichtig}}
+		<br>
+		<h2> Das ausgewählte Bild war: Falsch! </h2>
+		<br>
+		<h2> Ausgewähltes Bild:</h2>
+		{{#with showPicAuswahl}}
+			<div id="zweite_spalte">
+				<img id="{{_id}}" class="bild_" src="{{Url}}" style=" border: 10px double; border-color: grey; height: 400px; width: 400px" >
+			</div>
+		{{/with}}
+	{{else}}
+		<br>
+		<h2> Das ausgewählte Bild war: Richtig! </h2>
+		<br>
+	{{/unless}}
 	<h2>Richtiges Bild:</h2>
 	{{#with showPicRichtig}}
 		<div id="zweite_spalte">

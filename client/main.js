@@ -142,7 +142,6 @@ Template.newgrouptemp.events({
 			const handle = query.observeChanges({
 				changed: function(id, fields) {
 					if (TempBilder.findOne().clear) {
-						console.log("changed");
 						if (TempBilder.findOne().route1) {
 							if (Gruppen.findOne({"nutzer": Meteor.user().username}).tager ) {
 								id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;	
@@ -166,7 +165,6 @@ Template.newgrouptemp.events({
 					}	
 				},
 				added: function(id, fields) {
-					console.log("added");
 					if (TempBilder.findOne().clear) {
 						if (TempBilder.findOne().route1) {
 							if (Gruppen.findOne({"nutzer": Meteor.user().username}).tager) {
@@ -301,18 +299,31 @@ Template.raten.helpers({
 	},
 
 	subscribenAndere: function() {
-		handler = Meteor.subscribe('andereBilder',f_meineGruppe());
 		queryAndere = AndereBilder.find();
-		console.log("subscribe");
+		handler_andere = Meteor.subscribe('andereBilder',f_meineGruppe());
 		const handlerAndere = queryAndere.observeChanges({
 				changed: function(id, fields) {
+					test = false;
 					zeigerAndere = AndereBilder.find().fetch({"_id" : 0, "User" : 1, "Bild" : 1});
-					for (var i = 0; i < zeigerAndere.length; i++) {
-						if (zeigerAndere[i].User !=  Meteor.user().username ) {
-							x = document.getElementById(zeigerAndere[i].Bild);
-							x.style.borderColor = "yellow";
+					y = document.getElementsByClassName("bild");
+					for (j = 0; j < y.length; j ++) {
+						if (y[j].style.borderColor != "blue") {
+							for (i = 0; i < zeigerAndere.length; i++ ) {
+								if (zeigerAndere[i].User !=  Meteor.user().username) {
+									if (y[j].id == zeigerAndere[i].Bild) {
+										test = true;
+										y[j].style.borderColor = "yellow";
+									}
+									if (!test) {
+										y[j].style.borderColor = "black";
+									} else {
+										test = false;
+									}
+								}
+							}
 						}
 					}
+					
 				},
 				added: function(id, fields) {
 					zeigerAndere = AndereBilder.find().fetch({"_id" : 0, "User" : 1, "Bild" : 1});
@@ -350,22 +361,22 @@ Template.raten.events({
 				y[i].style.borderColor= "black";
 			}
 		}
-		x.style.outlineColor = "black";
+		//x.style.outlineColor = "black";
 		//markiert ausgewähltes Bild
 		x.style.borderColor = "blue";
 		//sagt dem Server welches Bild ausgewählt wurde
 		id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;
-		console.log(this._id);
 		Gruppen.update({ _id : id}, {$set: {auswahl : this._id}});
 
-		Tracker.autorun(() => {
-			const result = Meteor.apply('auswaehlen', [this._id, f_meineGruppe(), Meteor.user().username],{
+		
+			console.log("test");
+			const resultAndere = Meteor.apply('auswaehlen', [this._id, f_meineGruppe(), Meteor.user().username],{
 				onResultReceived: function() {
 					handler = Meteor.subscribe('spielStart',f_meineGruppe(), {
 					});
 				}
 			});
-		});
+		
 	},
 
 	
@@ -424,11 +435,7 @@ Template.zwischenErgebnis.helpers({
 	},
 
 	bildRichtig: function() {
-		if(TempBilder.findOne().auswahl) {
-			return "Richtig!";
-		} else {
-			return "Falsch!";
-		}
+		return TempBilder.findOne().auswahl;
 	},
 
 	showPicAuswahl: function() {
