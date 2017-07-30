@@ -12,7 +12,7 @@
 	   	<div class ="columnscontainer">
 			<div class="leftcolumn">
 			{{#unless bildRichtig}}
-				<h4> Das ausgewählte Bild war: Falsch! </h4>
+				<h4> Das Bild wurde nicht erraten! </h4>
 				<br>
 				<h4> Ausgewähltes Bild:</h4>
 				{{#with showPicAuswahl}}
@@ -22,7 +22,8 @@
 				{{/with}}
 			{{else}}
 				<br>
-				<h4> Das ausgewählte Bild war: Richtig! </h4>
+				<h4> Das ausgewählte Bild ist richtig
+				! </h4>
 				<br>
 			{{/unless}}
 			<h4>Richtiges Bild:</h4>

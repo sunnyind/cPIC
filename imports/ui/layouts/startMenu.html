@@ -12,17 +12,25 @@
 	 	</head>
 	  	<body>
 
-	 	<div id="mySidenav" class="sidenav">
-		  <a href="#" id="about">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Informationen <i class="material-icons">info_outline</i></a>
-		  <a href="#" id="blog">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Anmeldung <i class="material-icons">perm_identity&nbsp;&nbsp;&nbsp;</i></a>
-
+	 	<div id="mySidenav" class="sidenav login overlay">
+		 	<div>
+		 		<div onclick="on()"><a href="#" id="blog" >Information</a></div>
+			 	<div id="overlay" onclick="off()">
+		  			<div id="text">Informationen zum Spiel</div>
+				</div>
+		 	</div>
+			<a href="#" id="about">Anmeldung</a>
+			<div>{{> loginButtons}}</div>
 		</div>
+		<script>
+		function on() {
+		    document.getElementById("overlay").style.display = "block";
+		}
 
-		<div class="logo" style="margin-left:80px;">
-		  <img src="/images/Logo.PNG" style=" width: 250px; height: 160px;">
-					<div><h1>G-Pic</h1></div>
-					<div class="login">Du bist als {{> loginButtons}} angemeldet</div>
-		</div>
+		function off() {
+		    document.getElementById("overlay").style.display = "none";
+		}
+		</script>
 	  </body>
 	</html>
 </template>
