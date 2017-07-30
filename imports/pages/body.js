@@ -8,10 +8,19 @@ import './message.js';
  import { Messages } from '../api/messages.js';
  Meteor.subscribe('userMessages')
  
+
+
+  Template.chat.onRendered(function () {
+      console.log("es sollte gescrollt werden")
+      $('.panel-body').scrollTop($('.media-list').height())
+    
+  });
+
  Template.chat.helpers({
    messages() {
      console.log('Nachricht');
-     return Messages.find();
+      
+     return Messages.find(); 
    },
  });
 

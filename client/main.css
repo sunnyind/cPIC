@@ -28,7 +28,10 @@ h5{
 
 }
 
-
+ .panel-body{
+   overflow-y:scroll;
+   height:60vh;
+ }
 
 
 .btn_{
