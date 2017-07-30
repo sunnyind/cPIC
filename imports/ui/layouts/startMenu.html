@@ -1,15 +1,28 @@
-<template name="startMenu">
-	<div id="zweite_spalte" class="start-menu">
-		<ul>
-			<li>
-				<a href="/start"><i class="fa fa-gamepad"></i> Los Geht's!</a>
-			</li>
-			<li>
-				<a href="/infos"><i class="fa fa-info"></i> Infos zum Spiel</a>
-			</li>
-			<li>
-				<a href="/aboutUs"><i class="fa fa-users"></i> Über uns</a>
-			</li>
-		</ul>
-	</div>
+<template name="startMenu">		
+	<html>
+  		<head>
+	    <!-- Material Design Lite -->
+	    <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+ 		<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue-indigo.min.css" /> 
+	    <!-- Material Design icon font -->
+	    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	    <meta name="viewport" content="width=1200px">
+
+	 	</head>
+	  	<body>
+
+	 	<div id="mySidenav" class="sidenav">
+		  <a href="#" id="about">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Informationen <i class="material-icons">info_outline</i></a>
+		  <a href="#" id="blog">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Anmeldung <i class="material-icons">perm_identity&nbsp;&nbsp;&nbsp;</i></a>
+
+		</div>
+
+		<div class="logo" style="margin-left:80px;">
+		  <img src="/images/Logo.PNG" style=" width: 250px; height: 160px;">
+					<div><h1>G-Pic</h1></div>
+					<div class="login">Du bist als {{> loginButtons}} angemeldet</div>
+		</div>
+	  </body>
+	</html>
 </template>

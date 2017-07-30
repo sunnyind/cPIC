@@ -1,17 +1,21 @@
 <template name="taggen">
+<<<<<<< HEAD
 	<div id="zweite_spalte">
+=======
+	<!--<div id="zweite_spalte">
+>>>>>>> e3baa0ab8fd82d2af41d4711dc7ec2ca771fe325
 	<h12> Bild: </h12>
 	{{#with showPic}}
 		<img id= "{{_id}}" class="bild_" src="{{Url}}" style=" border: 10px double; border-color: grey; height: 400px; width: 400px" >
 	{{/with}} 
-	</div>
+	</div>-->
 	<!--Darstellung der Tags-->
-	Tags: <br> 
+	<!--Tags: <br> 
 	{{#each TagsListe}}
   		{{Tag}}, 
-  	{{/each}}
+  	{{/each}}-->
 	<!-- Eingabe der Tags-->
-	<form class="new-tag">
+	<!-- <form class="new-tag">
     	Neues Tag:<br> 
     <input type="text" name="text" autocomplete="off" placeholder="Tag eingeben" required>
     <button class="btn btn-info send" type="submit">Senden</button>
@@ -19,5 +23,69 @@
     <br>
     </form>
 
-    {{> chat2}}
+    {{> chat2}}-->
+<html>
+	<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+ 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ 	<title>Tagger Seite</title>
+	</head>
+  
+  	<body>
+  	<h1>Tagger Seite</h1>
+
+  	<div class="columnsContainer">
+
+	  	<div class="leftColumn">
+	  	<div>
+	  		<h2>Was siehst du auf diesem Bild?</h2>
+			{{#with showPic}}
+			<img id= "{{_id}}" class="bild_" src="{{Url}}" style=" border: 10px double; border-color: grey; height: 400px; width: 400px" >
+			{{/with}}
+		</div>  
+		<div class="tags">
+			Tags: <br> 
+			{{#each TagsListe}}
+		  		{{Tag}}, 
+		  	{{/each}}	
+		</div>	
+		<div class="inputTag">
+			<form class="new-tag" action="/action_page.php">
+  			  <div class="form-group">
+  			  <h2>Gebe passende Schlüsselwörter zu deinem Bild ein</h2>
+			     <input class="form-control input-lg" id="inputlg" type="text" name="text" autocomplete="off" placeholder="Tag eingeben" required size="1" maxlength="15" style="width:200px;">
+			     <button class="btn btn-info send" type="submit">Senden</button>
+			  </div>
+		    </form>
+		</div> 
+	  	</div>
+
+	  	<div class="rightColumn">
+	  	<div class="countdown">
+	  			<script type="text/javascript">
+		function countDown(secs,elem) {
+			var element = document.getElementById(elem);
+			element.innerHTML = "Du hast noch "+secs+" sek. Zeit";
+			if (secs < 1){
+				clearTimeout (timer);
+				element.innerHTML = '<h5>Deine Zeit ist abgelaufen!</h5>';
+				element.innerHTML += '<button class="btn btn-info send" type="submit">Zum Zwischenergebnis</button>';
+;
+			}
+			secs --;
+			var timer = setTimeout('countDown('+secs+',"'+elem+'")',1000);
+		}
+	</script>
+	<div id="status"></div>
+	<script type="text/javascript">countDown(60,"status");</script>
+	  	</div>
+	  		<h2>Unterhaltung deiner Mitspieler</h2>
+	  	<div class="chat2"></div>
+	  		{{> chat2}}
+	  	</div>
+  	</div>
+  </body>
+</html>
 </template>

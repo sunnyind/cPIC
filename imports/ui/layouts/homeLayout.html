@@ -5,9 +5,63 @@
 			{{> startMenu}}
 		</div>
 	</main>
-	<side>
-		<div class="picGallery">
+<html>
+	<head>
+		<meta charset="utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <meta name="viewport" content="width=1200px">
+  	</head>
+  
+  	<body>
+
+  	<div id="pagewrap">
+
+		<section id="content">
+			<div style="text-align: center;"><h2>Spielanleitung</h2></div>
+			<p>This page demonstrates a 3 column responsive layout, complete with responsive images and jquery slideshow.</p>
+		</section>
+		
+		<section id="middle">
+			<div style="text-align: center;"><h2>Spiel starten</h2></div>
+			{{> getStarted}}
+			<button class="btn btn-info send" type="submit">Spiel starten</button>
+
+		</section>
+
+		<aside id="sidebar">
+			<div style="text-align: center;"><h2>Minispiel</h2></div>
 			{{> miniGame}}
-		</div>
-	</side>
+		</aside>
+
+	</div>
+	  	
+					<!--<div class="slideshow">
+			  			<div class="w3-content w3-section" style="max-width:500px">
+						  <img class="mySlides" src="/images/S04_E01.01.jpg" style="width:100%;">
+						  <img class="mySlides" src="/images/S04_E01.05.jpg" style="width:100%;">
+						  <img class="mySlides" src="/images/S04_E01.03.jpg" style="width:100%;">
+						  <img class="mySlides" src="/images/S04_E01.04.jpg" style="width:100%;">
+						</div>
+					script für slideshow-->
+					<!--<script>
+						var myIndex = 0;
+						carousel();
+
+						function carousel() {
+						    var i;
+						    var x = document.getElementsByClassName("mySlides");
+						    for (i = 0; i < x.length; i++) {
+						       x[i].style.display = "none";  
+						    }
+						    myIndex++;
+						    if (myIndex > x.length) {myIndex = 1}    
+						    x[myIndex-1].style.display = "block";  
+						    setTimeout(carousel, 2000); // Change image every 2 seconds
+						}
+					</script>
+			  		</div>-->
+					
+	</body>
+</html>
 </template>

@@ -1,27 +1,8 @@
 /* CSS declarations go here */
-#steuerung {
-  width: 20em;
-  float:left;
-}
 
-#zweite_spalte {
-  margin-left: 6em;
-  text-align: center; 
-}
-
-#dritte_spalte{
-  text-align: right;
-}
-
-b{
-  color: #00BFFF;
-}
-
-li{
-  margin: 2%;
-}
 
 h1{
+<<<<<<< HEAD
   font-family: sans-serif;
   margin-right: 20%; 
 }
@@ -37,24 +18,23 @@ h3{
   font-family: sans-serif;
   text-align: left;
   margin: 2%;
+=======
+  text-align: center;
+  font-family: verdana, sans-serif;
+>>>>>>> e3baa0ab8fd82d2af41d4711dc7ec2ca771fe325
 }
 
 h4{
-  font-family: sans-serif;
-  text-align: center;
-}
+  text-align: left;
+  left: 0;
+  }
 
 h5{
-  font-family: sans-serif;
-  text-align: left;
-  margin: 2%;
-}
 
-h6{
-  font-family: sans-serif;
 }
 
 
+<<<<<<< HEAD
 
 .btn_{
   margin-right: 5%;
@@ -62,9 +42,17 @@ h6{
 }
 
 .login{
+=======
+.logo{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+>>>>>>> e3baa0ab8fd82d2af41d4711dc7ec2ca771fe325
   text-align: center;
+  margin: 0 auto;
 }
 
+<<<<<<< HEAD
 .start-menu ul {
     text-align: center;
     list-style-type: none;
@@ -95,21 +83,22 @@ h6{
   right: 10;
   width: 50%;
   margin: 3%;
+=======
+.info{
+  text-align: left;
+  padding: 2em;
+>>>>>>> e3baa0ab8fd82d2af41d4711dc7ec2ca771fe325
 }
 
-.panel-body {
-  overflow-y:scroll;
-  height:60vh;
-}
+.login{
+  text-align: right;
+  padding: 2em;
 
-.panel panel-info{
-    width: 60%;
 }
 
 .pic_mini {
   width: 300px;
-  height: 600px;
-  border: 1px solid #555;
+  height: 500px;
   margin-bottom: 300%; 
   padding-left: : 1%;
   margin: 5%;
@@ -119,35 +108,326 @@ h6{
 .chatHaupt{
   width: auto;
   margin:40px;
-  padding: 30px;
+  padding: 10px;
+}
+/*-----------Side Nav Menü------------------*/
+#mySidenav a {
+    position: absolute;
+    left: -60px;
+    transition: 0.3s;
+    padding: 15px;
+    width: 250px;
+    text-decoration: none;
+    font-size: 20px;
+    color: white;
+    border-radius: 0 5px 5px 0;
 }
 
-/*.raten_img{
-  width: 150px; 
-  height: 150px; 
-  border:0px;
-}*/
+#mySidenav a:hover {
+    left: 0;
+}
 
+#about {
+    top: 40px;
+    background-color: #4CAF50;
+}
+
+#blog {
+    top: 100px;
+    background-color: #2196F3;
+}
+ 
+/*------- Bilder der Rater Seite------------*/
 .bild{
   border: 10px solid;
   border-color: black;
   outline-style: solid;
   outline-width: 5px;
+<<<<<<< HEAD
   outline-color: black; 
   height: 200px; 
   width: 200px;
   padding: 5px;
+=======
+  outline-color: black;
+  height: 250px; 
+  width: 250px;
+  padding: 10px;
+  padding-bottom: 10px;
+>>>>>>> e3baa0ab8fd82d2af41d4711dc7ec2ca771fe325
   float: left;
-  margin-right: 2%;
+  margin-right: 6%;
+  margin-bottom: 8%;
 }
 
-.bild_{
-  text-align: center;
-}
-
-/*.countDown {
+.countDown {
     font-size: 20px;
     border: 2px solid black;
     padding: 6px;
     background-color:  #00BFFF;
+<<<<<<< HEAD
 }*/
+=======
+}
+
+/*-------Eingabefelder------------*/
+
+
+input[type=text], pic_mini {
+    width: 100%;
+}
+
+input[type=text]:focus, pic_mini   {
+  font-family: FontAwesome; 
+  border: 3px solid #555;
+}
+
+/*------------drei Spalten Design für das Home Layout--------------*/
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
+body { 
+  font-family: 'Open Sans', sans-serif;
+  color: #666;
+}
+
+/* STRUCTURE */
+
+#pagewrap {
+  padding: 5px;
+  width: 100%;
+  margin: 20px auto;
+}
+header {
+  height: 100px;
+  padding: 0 15px;
+}
+#content {
+  width: 30%;
+  float: left;
+  padding: 5px 15px;
+  margin-left: 7em; 
+}
+
+#middle {
+  width: 30%; /* Account for margins + border values */
+  float: left;
+  padding: 5px 15px;
+  margin: 0px 5px 5px 5px;
+}
+
+#sidebar {
+  width: 30%;
+  padding: 5px 15px;
+  float: left;
+}
+
+/************************************************************************************
+MEDIA QUERIES
+*************************************************************************************/
+/* for 980px or less */
+@media screen and (max-width: 980px) {
+  
+  #pagewrap {
+    width: 94%;
+  }
+  #content {
+    width: 41%;
+    padding: 1% 4%;
+  }
+  #middle {
+    width: 41%;
+    padding: 1% 4%;
+    margin: 0px 0px 5px 5px;
+    float: right;
+  }
+  
+  #sidebar {
+    clear: both;
+    padding: 1% 4%;
+    width: auto;
+    float: none;
+  }
+
+  header{
+    padding: 1% 4%;
+  }
+}
+
+/* for 700px or less */
+@media screen and (max-width: 600px) {
+
+  #content {
+    width: auto;
+    float: none;
+  }
+  
+  #middle {
+    width: auto;
+    float: none;
+    margin-left: 0px;
+  }
+  
+  #sidebar {
+    width: auto;
+    float: none;
+    margin-right: 10em;
+  }
+
+}
+
+/* for 480px or less */
+@media screen and (max-width: 480px) {
+
+  header {
+    height: auto;
+  }
+  h1 {
+    font-size: 2em;
+  }
+  #sidebar {
+    display: none;
+  }
+
+}
+
+
+#middle {
+  background: #f8f8f8;
+}
+
+header, #content, #middle, #sidebar {
+  margin-bottom: 5px;
+}
+
+/*---------------Slideshow----------------------*/
+
+.slideshow{
+  background: center;
+}
+
+
+/*--------------Overlay---------------*/
+
+body {
+    margin: 0;
+    font-family: 'Lato', sans-serif;
+}
+
+.overlay {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0, 0.9);
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+
+.overlay-content {
+    position: relative;
+    top: 25%;
+    width: 100%;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.overlay a {
+    padding: 8px;
+    text-decoration: none;
+    font-size: 36px;
+    color: white;
+    display: block;
+    transition: 0.3s;
+}
+
+.overlay a:hover, .overlay a:focus {
+    color: #f1f1f1;
+}
+
+.overlay .closebtn {
+    position: absolute;
+    top: 20px;
+    right: 45px;
+    font-size: 60px;
+}
+
+@media screen and (max-height: 450px) {
+  .overlay a {font-size: 20px}
+  .overlay .closebtn {
+    font-size: 40px;
+    top: 15px;
+    right: 35px;
+  }
+}
+
+/*----------login---------------*/
+
+body{
+    padding: 50px;
+}
+.modal-dialog {
+    width: 300px;
+}
+.modal-footer {
+    height: 70px;
+    margin: 0;
+}
+.modal-footer .btn {
+    font-weight: bold;
+}
+.modal-footer .progress {
+    display: none;
+    height: 32px;
+    margin: 0;
+}
+.input-group-addon {
+    color: #fff;
+    background: #3276B1;
+}
+
+
+/*-------------2 Spalten Layout für Tagger Seite--------------*/
+
+*, *:before, *:after {
+  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+}
+
+body { margin: 0; }
+
+.columnsContainer { position: relative; margin: .5em; }
+
+.leftColumn, .rightColumn{ padding: 1.25em; }
+
+.leftColumn { margin-bottom: .5em; }
+
+/* MEDIA QUERIES */
+@media screen and (min-width: 47.5em ) {
+  .leftColumn { margin-right: 10.5em; }
+
+  .rightColumn { position: absolute; top: 0; right: 0; width: 27.75em; }   
+}
+
+
+/*----------------- Layout für das Zwischenergebnis -----------------*/
+
+*, *:before, *:after {
+  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+}
+
+body { margin: 0; }
+
+.columnscontainer { position: relative; margin: .5em; }
+
+.leftcolumn, .rightcolumn{ padding:1.25;}
+
+/* MEDIA QUERIES */
+@media screen and (min-width: 47.5em  ) {
+  .leftcolumn { position: absolute; top: 0; left: 0; width: 5em;}
+
+  .rightcolumn { position: absolute; top: 0; right: 0; width: 5em; }   
+}
+
+>>>>>>> e3baa0ab8fd82d2af41d4711dc7ec2ca771fe325

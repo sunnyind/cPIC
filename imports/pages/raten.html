@@ -1,6 +1,6 @@
 <template name="raten">
 	<!--Darstellung der Bilder-->
-	<div id="zweite_spalte">
+	<!--<div id="zweite_spalte">
 		<h5>Bilder:</h5>
 	<ul>
 		{{#each showPics}}
@@ -21,6 +21,54 @@
   	<br>
   	<br>
   	
-  	  {{> chat}}
+  	  {{> chat}}-->
+
+<html>
+	<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>Rater Seite</title>
+  	</head>
+  
+  <body>
+  	<h1>Rater Seite</h1>
+    
+
+  	<div class="columnsContainer">
+
+	  	<div class="leftColumn">
+	  		<h2>Welches Bild ist gesucht?</h2>
+	  			<ul>
+			{{#each showPics}}
+			<div class="ímg_raten">
+				<img id="{{_id}}" class="bild" name="{{Nummer}}" src="{{Url}}">
+			</div>
+			{{/each}} 
+			</ul>
+			{{ subscribenFalsch }}
+			{{ subscribenAndere }}
+	  	</div>
+
+	  	<div class="rightColumn">
+	  		<h2></h2>
+	  		<div id="outputTag">
+				<h5>Schlagwörter zum gesuchten Bild</h5> <br> 
+				{{#each TagsListe}}
+  				{{Tag}}, 
+  				{{/each}}
+  			</div>
+  			  <br>
+  			  <br>
+  			<div class="chat">
+  	  			{{> chat}}-->
+  	 		</div>
+	  	</div>
+  	</div>
+  </body>
+</html>
   	
 </template>
