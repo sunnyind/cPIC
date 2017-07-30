@@ -1,19 +1,35 @@
 <template name="zwischenErgebnis">
-	{{clearRound}}
-	<h13> Gruppe:  {{gruppeFinden}}</h13>
+<!--	{{clearRound}}-->
+	<!--<h2> Gruppe:  <b>{{gruppeFinden}}</b></h2>
 	<br>
-	<h14> Score: {{scoreFinden}}</h14>
-	<br> 
-	<h15> <!-- Runde {{rundenGespielt}} von 4 </h15> -->
+	<h2> Runde: <b>{{rundeFinden}}</b></h2>
 	<br>
-	<h16> Das ausgewählte Bild war: {{bildRichtig}} </h16>
-	<br>
-	<h17>Richtiges Bild:</h17>
+	<h2> Score: <b>{{scoreFinden}}</b></h2>
+	<br> -->
+	<!-- Runde {{rundenGespielt}} von 4 </h15> -->
+	<!--{{#unless bildRichtig}}
+		<br>
+		<h2> Das ausgewählte Bild war: Falsch! </h2>
+		<br>
+		<h2> Ausgewähltes Bild:</h2>
+		{{#with showPicAuswahl}}
+			<div id="zweite_spalte">
+				<img id="{{_id}}" class="bild_" src="{{Url}}" style=" border: 10px double; border-color: grey; height: 400px; width: 400px" >
+			</div>
+		{{/with}}
+	{{else}}
+		<br>
+		<h2> Das ausgewählte Bild war: Richtig! </h2>
+		<br>
+	{{/unless}}
+	<h2>Richtiges Bild:</h2>
 	{{#with showPicRichtig}}
-	<img id="{{_id}}" class="bild" src="{{Url}}" style=" border: 10px double; border-color: grey; height: 400px; width: 400px" >
+		<div id="zweite_spalte">
+			<img id="{{_id}}" class="bild_" src="{{Url}}" style=" border: 10px double; border-color: grey; height: 400px; width: 400px" >
+		</div>
 	{{/with}}
 	<br>
-	<h18>Tags:</h18>
+	<h5>Tags:</h5>
 	<br>
 	{{#each findTags}}
   		{{Tag}}, 
@@ -23,4 +39,67 @@
     	<button type="submit"> Bereit</button>
     </form>
 
+    <form class="weiter" style=" background-color: grey; ">
+    	<button type="submit"> Nächste Runde</button>
+    </form>-->
+{{clearRound}}
+   <html>
+	   <head>
+		<meta charset="utf-8">
+	    <meta http-equiv ="X-UA-Compatible" Inhalt ="IE = Rand" />
+	    <meta name ="Ansichtsfenster" Inhalt ="width = Gerätebreite, initial-scale = 1">
+	   	<h1>Zwischenergebis</h1>
+	   </head>
+	   <body>
+	   	<div class ="columnscontainer">
+			<div class="leftcolumn">
+			{{#unless bildRichtig}}
+				<h4> Das ausgewählte Bild war: Falsch! </h4>
+				<br>
+				<h4> Ausgewähltes Bild:</h4>
+				{{#with showPicAuswahl}}
+					<div>
+						<img id="{{_id}}" class="bild_" src="{{Url}}" style=" border: 10px double; border-color: grey; height: 400px; width: 400px; left: 0; " >
+					</div>
+				{{/with}}
+			{{else}}
+				<br>
+				<h4> Das ausgewählte Bild war: Richtig! </h4>
+				<br>
+			{{/unless}}
+			<h4>Richtiges Bild:</h4>
+			{{#with showPicRichtig}}
+				<div>
+					<img id="{{_id}}" class="bild_" src="{{Url}}" style=" border: 10px double; border-color: grey; height: 400px; width: 400px;left: 0;" >
+				</div>
+			{{/with}}
+			</div>
+			<div class="rightcolumn">
+				<h2> Gruppe:  <b>{{gruppeFinden}}</b></h2>
+				<br>
+				<h2> Runde: <b>{{rundeFinden}}</b></h2>
+				<br>
+				<h2> Score: <b>{{scoreFinden}}</b></h2>
+				<br>
+				<h2> Runde {{rundenGespielt}} von 4</h2>
+				<br>
+				<h5>Tags:</h5>
+				<br>
+				{{#each findTags}}
+			  		{{Tag}}, 
+			  	{{/each}}
+			  	<br>
+			  	<br>
+			  	<form class="rdy" style=" background-color: grey; ">
+			    <button type="submit"> Nächste Runde</button>
+			    </form>
+			    <br>
+			    <br>
+			    <form class="weiter" style=" background-color: grey; ">
+			    	<button type="submit"> Spiel verlassen</button>
+			    </form>
+			</div>
+		</div>
+	</body>
+  </html>
 </template>
