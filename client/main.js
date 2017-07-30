@@ -285,7 +285,6 @@ Template.raten.helpers({
 
 		return merke.find();
 	},
-<<<<<<< HEAD
 
 	//Helfer um als falsch markierte Bilder zu sehen
 	subscribenFalsch: function() {
@@ -335,45 +334,6 @@ Template.raten.helpers({
 								test = false
 							}
 
-=======
-
-		subscribenFalsch: function() {
-
-		handler = Meteor.subscribe('falscheBilder',f_meineGruppe());
-		queryWrong = FalscheBilder.find();
-		const handleWrong = queryWrong.observeChanges({
-				changed: function(id, fields) {
-					zeiger = FalscheBilder.find().fetch({"_id" : 0, "Bild" :1});
-					for (var i = 0; i < zeiger.length; i++) {
-						x = document.getElementById(zeiger[i].Bild);
-						x.style.outlineColor = "red";
-					}
-				},
-				added: function(id, fields) {
-					zeiger = FalscheBilder.find().fetch({"_id" : 0, "Bild" :1});
-					for (var i = 0; i < zeiger.length; i++) {
-						x = document.getElementById(zeiger[i].Bild);
-						x.style.outlineColor = "red";
-					}
-				},
-				removed: function(id) {
-					test = false;
-					zeiger = FalscheBilder.find().fetch({"_id" : 0, "Bild" :1});
-					y = document.getElementsByClassName("bild");
-					for (j=0; j< y.length; j++) {
-						if (y[j].style.outlineColor == "red") {
-							for (var i = 0; i < zeiger.length; i++) {
-								if(y[j].id == zeiger[i].Bild) {
-									test = true;
-								}
-							}
-							if (!test) {
-								y[j].style.outlineColor = "black";
-							} else {
-								test = false
-							}
-
->>>>>>> e3baa0ab8fd82d2af41d4711dc7ec2ca771fe325
 						}
 					}
 				},
@@ -613,7 +573,7 @@ Template.zwischenErgebnis.events({
 				}
 			});
 
-		} */
+		} 
 
-	},
+	},*/
 })
