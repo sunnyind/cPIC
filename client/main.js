@@ -30,6 +30,10 @@ import 'lightgallery/dist/css/lightgallery.css';
 import 'jquery/dist/jquery.min.js'
 import 'lightgallery/dist/js/lightgallery.min.js';
 
+//magnify
+import 'magnify/dist/css/magnify.css';
+import 'magnify/dist/js/jquery.magnify.js';
+
 /* Plugins für LightGallery*/
 import 'lg-zoom/dist/lg-zoom.js';
 
@@ -260,28 +264,28 @@ Template.raten.helpers({
 
 		//Fülle Collection mithilfe der Verweise aus TempBilder und Bildercollection BilderLokal
 		pic = BilderLokal.findOne({_id : zeiger.Bild0});
-		merke.insert({_id : zeiger.Bild0,"Url" :pic.Url, "Nummer" : "0" });
+		merke.insert({_id : zeiger.Bild0,"Url" :pic.Url, "Nummer" : "1" });
 
 		pic = BilderLokal.findOne({_id : zeiger.Bild1});
-		merke.insert({_id : zeiger.Bild1,"Url" :pic.Url, "Nummer" : "1" });
+		merke.insert({_id : zeiger.Bild1,"Url" :pic.Url, "Nummer" : "2" });
 
 		pic = BilderLokal.findOne({_id : zeiger.Bild2});
-		merke.insert({_id : zeiger.Bild2,"Url" :pic.Url, "Nummer" : "2" });
+		merke.insert({_id : zeiger.Bild2,"Url" :pic.Url, "Nummer" : "3" });
 
 		pic = BilderLokal.findOne({_id : zeiger.Bild3});
-		merke.insert({_id : zeiger.Bild3,"Url" :pic.Url, "Nummer" : "3" });
+		merke.insert({_id : zeiger.Bild3,"Url" :pic.Url, "Nummer" : "4" });
 
 		pic = BilderLokal.findOne({_id : zeiger.Bild4});
-		merke.insert({_id : zeiger.Bild4,"Url" :pic.Url, "Nummer" : "4" });
+		merke.insert({_id : zeiger.Bild4,"Url" :pic.Url, "Nummer" : "5" });
 
 		pic = BilderLokal.findOne({_id : zeiger.Bild5});
-		merke.insert({_id : zeiger.Bild5,"Url" :pic.Url, "Nummer" : "5" });
+		merke.insert({_id : zeiger.Bild5,"Url" :pic.Url, "Nummer" : "6" });
 
 		pic = BilderLokal.findOne({_id : zeiger.Bild6});
-		merke.insert({_id : zeiger.Bild6,"Url" :pic.Url, "Nummer" : "6" });
+		merke.insert({_id : zeiger.Bild6,"Url" :pic.Url, "Nummer" : "7" });
 
 		pic = BilderLokal.findOne({_id : zeiger.Bild7});
-		merke.insert({_id : zeiger.Bild7,"Url" :pic.Url, "Nummer" : "7" });
+		merke.insert({_id : zeiger.Bild7,"Url" :pic.Url, "Nummer" : "8" });
 
 		return merke.find();
 	},

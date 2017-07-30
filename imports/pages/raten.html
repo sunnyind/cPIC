@@ -1,4 +1,12 @@
 <template name="raten">
+
+<style>
+	/*Linse verkleinern*/
+	.magnify > .magnify-lens {
+		width: 125px;
+		height: 125px;
+	}
+</style>
 	<!--Darstellung der Bilder-->
 	<!--<div id="zweite_spalte">
 		<h5>Bilder:</h5>
@@ -44,8 +52,11 @@
 	  		<h2>Welches Bild ist gesucht?</h2>
 	  			<ul>
 			{{#each showPics}}
+			
 			<div class="ímg_raten">
-				<img id="{{_id}}" class="bild" name="{{Nummer}}" src="{{Url}}">
+				
+				<img id="{{_id}}" class="zoom bild" data-magnify-src="{{Url}}" name="{{Nummer}}" src="{{Url}}">
+				
 			</div>
 			{{/each}} 
 			</ul>
@@ -70,5 +81,11 @@
   	</div>
   </body>
 </html>
+
+<script>
+$(document).ready(function() {
+  $('.zoom').magnify();
+});
+</script>
   	
 </template>
