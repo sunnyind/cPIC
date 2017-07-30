@@ -47,10 +47,14 @@ function randBilder(){
 };
 
 Meteor.methods({
+	//Runde zuende -> Datenbanken auf den richtigen Stand für neue Runde bringen:
 	clearRound(gruppenName) {
+		//Testen ob alle Gruppenmitglieder bereits auf der Ergebnisseite sind
 		if (Gruppen.find({"Gruppe": gruppenName, route31: true}).count() == Gruppen.find({"Gruppe": gruppenName}).count()) {
+			//Routing zurücksetzten
 			id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
 			TempBilder.update({_id : id}, {$set: { route2 : false} });
+			//Wenn das Bild erraten wurde, Tags speichern
 			if (TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1,auswahl:1})[0].auswahl) {
 				bild = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:0,richtig:1})[0].richtig;
 				zeiger = Tags.find({"Gruppe" : gruppenName}).fetch();
@@ -62,14 +66,17 @@ Meteor.methods({
 			}
 
 		}
+		//Die Markierungen der Bilder löschen
 		AndereBilder.remove({"Gruppe" : gruppenName});
 		FalscheBilder.remove({"Gruppe" : gruppenName});
 	},
 	
+	//Vom Tagger eingegebene Tags in vorläufiger DB speichern 
 	insertTag(gruppenName,tag) {
 		Tags.insert({"Gruppe": gruppenName, Tag: tag});
 	},
 
+	//Spielstart
 	bereit(gruppenName) {
 		var zaehle = Gruppen.find({"Gruppe" : gruppenName, "ready" : false}).count();
 		var anzahl = Gruppen.find({"Gruppe" : gruppenName}).count();
@@ -77,28 +84,21 @@ Meteor.methods({
 		if(anzahl > 1 && zaehle == 0) {
 			//stelle sicher, dass alle dbs auf richtigem Stand:
 			Tags.remove({"Gruppe": gruppenName});
-/** nur eine Runde:
-			TempBilder.remove({});
-			TempBilder.insert({"Gruppe": gruppenName, auswahl : false , route1 : false, route2 : false, route3 : false, score : 0, round : 0, auswahlPic : ""});	
-*/
-		//neue Runde vorbereiten  bzw. nächste Runde vorbereiten
+
+		//neue Runde vorbereiten  bzw. nächste Runde vorbereiten (TempBilder auf den richtigen Stand bringen)
 		if (TempBilder.find({"Gruppe" : gruppenName}).count() == 0) {
 				TempBilder.insert({"Gruppe": gruppenName, auswahl : false , route1 : false, route2 : false, clear : false, score : 0, round : 1, auswahlPic : "", scoreInc : false});	
 			} else {
 				id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
-				TempBilder.update({_id : id}, {$set: { clear : false } });
-				TempBilder.update({_id : id}, {$set: { auswahl : false } });
+				TempBilder.update({_id : id}, {$set: { clear : false } });   //Routing blockieren
+				TempBilder.update({_id : id}, {$set: { auswahl : false } }); 
 				TempBilder.update({_id : id}, {$set: { route1 : false } });	
 				TempBilder.update({_id : id}, {$set: { route2 : false } });	
-				TempBilder.update({_id : id}, {$inc: { round : 1 } });
+				TempBilder.update({_id : id}, {$inc: { round : 1 } });	//Rundenanzahl erhöhen
 				TempBilder.update({_id : id}, {$set: { auswahlPic : "" } });
 				TempBilder.update({_id : id}, {$set: { scoreInc : false } });
 				
-/**  4 Runden:
-				if (TempBilder.find({_id : id, round: {$gt: 4 }}).count() > 0 ){
-					TempBilder.update({_id : id}, {$set: {round : 0 } });
-				} 
-*/
+
 			}
 			//wähle zufällige Bilder:			
 			id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
@@ -121,62 +121,75 @@ Meteor.methods({
 			//richtiges Bild auswählen:
 			rand = randNumber(0,7);
 			TempBilder.update({_id : id}, {$set: {richtig : pics[rand]._id} });
-			//sorge für Weiterleitung:
+			//Routing vorbereiten
 			TempBilder.update({_id : id}, {$set: { route1 : true} });
-			console.log("bereit fertig");
+			//Routing freigeben:
 			TempBilder.update({_id : id}, {$set: { clear : true } });
 		}
 		
 	},
 
+	//Bilder erraten(Spielablauf):	
 	auswaehlen(wahl,gruppenName, username) {
+		//Den Spielern zeigen, welche Bilder von anderen Spielern ausgewählt wurden:
 		if(AndereBilder.find({"Gruppe" : gruppenName, "User" : username}).count()==0 ) {
+			//Der Spieler hat noch kein Bild ausgewählt -> Auswahl speichern
 			AndereBilder.insert({"Gruppe" : gruppenName, "User" : username, "Bild" : wahl});
 		} else {
+			//Der Spieler hat bereits ein Bild ausgewählt -> Auswahl ändern
 			id = AndereBilder.find({"Gruppe": gruppenName, "User" : username}).fetch({_id:1})[0]._id;
-			console.log(id);
-			console.log(wahl);
 			AndereBilder.update({_id : id}, {$set: { "Bild" : wahl}});
 
 		}
-		//Sobald jemand ein Bild auswählt wird verhindert, dass sofort weitergeroutet wird:
+
 		id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
+		//Routing blockieren
 		TempBilder.update({_id : id}, {$set: { clear : false } });
+		//Falsches Routing verhindern:
 		TempBilder.update({_id : id}, {$set: { route1 : false } });
 
 		zaehle = Gruppen.find({"Gruppe" : gruppenName, "auswahl" : wahl}).count();
 		anzahl = Gruppen.find({"Gruppe" : gruppenName}).count() - 1;
 
 		id = TempBilder.find({"Gruppe": gruppenName}).fetch({_id:1})[0]._id;
-		runde = TempBilder.findOne({_id : id}).round;
-
+		
+		//Testen ob aller Spieler dasselbe Bild ausgewählt haben
 		if (zaehle == anzahl) {
 			zeiger = TempBilder.findOne({"Gruppe" : gruppenName});
+			//Ausgewähltes Bild speichern
 			TempBilder.update({_id : id}, {$set: { auswahlPic : wahl}})
+			//Testen ob richtiges Bild ausgewählt wurde
 			if (TempBilder.find({"Gruppe" : gruppenName, richtig : wahl}).count() > 0) {
 				TempBilder.update({_id : id}, {$set: { auswahl : true } });
+				//richtiges Bild -> Score erhöhen
 				if (!TempBilder.find({"Gruppe": gruppenName}).fetch({_id : 0, scoreInc : 1})[0].scoreInc) {
 					TempBilder.update({_id : id}, {$set: { scoreInc : true } });					
 					TempBilder.update({_id : id}, {$inc: { score : 1 } });
 				}
 			}
+			//Routing vorbereiten
 			TempBilder.update({_id : id}, {$set: { route2 : true } });
 			
 		}
+		//Routing freigeben
 		TempBilder.update({_id : id}, {$set: { clear : true } });
 		return true;
 	},
 
+	//falsche Bilder markieren
 	falsch(gruppenName,bildName) {
 		if (FalscheBilder.find({"Gruppe" : gruppenName, "Bild" : bildName}).count() == 0) {
+			//Bild wurde noch nicht markiert -> Bild wird markiert
 			FalscheBilder.insert({"Gruppe" : gruppenName, "Bild" : bildName});
 		} else {
+			//Bild wurde schon markiert -> Markierung wird aufgehoben
 			FalscheBilder.remove({"Gruppe" : gruppenName, "Bild" : bildName});
 		}
 		return true;
 	},
 });
 
+//Rechte für die Gruppencollection vergeben:
 Gruppen.allow({
 	insert(userId, doc) {
 		return true;
@@ -231,28 +244,35 @@ Meteor.publish("userMessages", function(){
 	 return Messages.find();
 });
 
+//Collection für den Spielverlauf (Routing, Bilder, Score, Runde ...)
 Meteor.publish("spielStart", function(gruppenName) {
 	return TempBilder.find({"Gruppe": gruppenName},{fields: { Gruppe : 0}});
 });
 
+//Collection mit den Bildern
 Meteor.publish("bilder",function() {
 	return BilderLokal.find();
 });
 
+//Collection um die Tags für die aktuelle Runde zu speichern
 Meteor.publish("tagsBild", function(gruppenName) {
 	return Tags.find({"Gruppe": gruppenName})
 });
 
+//Collection um Bilder als Falsch zu markieren
 Meteor.publish("falscheBilder", function(gruppenName) {
 	return FalscheBilder.find({"Gruppe": gruppenName})
 });
 
+//Collection um die, von anderen Spielern ausgewählten Bilder, anzuzeigen
 Meteor.publish("andereBilder", function(gruppenName) {
 	return AndereBilder.find({"Gruppe": gruppenName})
 });
 
 Meteor.startup(() => {
   // code to run on server at startup
+
+  //Lokale Bilder in DB speichern, falls noch nicht vorhanden
   if(BilderLokal.find().count() == 0) {
   	lokal = "S06_D01.";
   	pfad = "/Bilder/";
