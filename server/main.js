@@ -84,6 +84,8 @@ Meteor.methods({
 		if(anzahl > 1 && zaehle == 0) {
 			//stelle sicher, dass alle dbs auf richtigem Stand:
 			Tags.remove({"Gruppe": gruppenName});
+			//Chat clearen:
+			Messages.remove({"Gruppe": gruppenName });
 
 		//neue Runde vorbereiten  bzw. nächste Runde vorbereiten (TempBilder auf den richtigen Stand bringen)
 		if (TempBilder.find({"Gruppe" : gruppenName}).count() == 0) {

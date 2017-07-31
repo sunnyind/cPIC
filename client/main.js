@@ -124,17 +124,18 @@ Template.newgrouptemp.events({
 	'submit .rdy'(event) {
 		event.preventDefault();
 		id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;
-		btn = document.getElementsByClassName("rdy");
+		btn = document.getElementById("startBtn");
+		//btn = document.getElementsByClassName("rdy");
 		ready = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":0, "ready": 1})[0].ready;
 
 		if (ready) {
 			//war bereits Bereit -> nicht mehr Bereit
 			Gruppen.update({ _id :id}, {$set: {ready : false}});
-			btn[0].style.backgroundColor = "grey";
+			btn.textContent = "Spiel starten";
 		} else {
 			//noch nicht Bereit -> wird jetzt Bereit
 			Gruppen.update({ _id : id}, {$set: {ready : true}});
-			btn[0].style.backgroundColor = "green";
+			btn.textContent = "Warte auf Mitspieler";
 			//Auf TempBilder lauschen um das Routing zu ermöglichen
 			const query = TempBilder.find();
 			Tracker.autorun(() => {
@@ -252,11 +253,6 @@ Template.raten.helpers({
 
 	//Helfer um die Bilder anzuzeigen:
 	showPics: function() {
-		//
-/** noch zu testen: ob gebraucht:
-		id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;
-		Gruppen.update({ _id : id}, {$set: {ready : false }}); */
-
 		//Verweise zu den Bildern für diese Runde:
 		zeiger = TempBilder.findOne();
 		//temporäre Collection für die Bilder
@@ -299,13 +295,13 @@ Template.raten.helpers({
 		const handleWrong = queryWrong.observeChanges({
 				//Ein Eintrag wurde geändert:
 				//kann vermutlich raus! Testen:
-				changed: function(id, fields) {
+/**				changed: function(id, fields) {
 					zeiger = FalscheBilder.find().fetch({"_id" : 0, "Bild" :1});
 					for (var i = 0; i < zeiger.length; i++) {
 						x = document.getElementById(zeiger[i].Bild);
 						x.style.outlineColor = "red";
 					}
-				},
+				}, */
 				//Ein Bild wurde neu markiert:
 				added: function(id, fields) {
 					zeiger = FalscheBilder.find().fetch({"_id" : 0, "Bild" :1});
@@ -552,32 +548,15 @@ Template.zwischenErgebnis.events({
 		//Setzt die Felder für den Spieler in der Gruppencollection zurück
 		name = f_meineGruppe();
 		Gruppen.update({_id: id}, {$set: {"Gruppe": name, nutzer: Meteor.user().username,ready: false, tager: false,auswahl: ""}});
-		//Leitet den Spieler auf die Startseite zurück
+		//Leitet den Spieler auf die Seite zum starten einer neuen Runde zurück
 		location.replace('start');
 	},
-/**
+
 	'submit .weiter'(event) {
 		event.preventDefault();
-		id = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":1})[0]._id;
-		btn = document.getElementsByClassName("weiter");
-		ready = Gruppen.find({"nutzer": Meteor.user().username}).fetch({"_id":0, "ready": 1})[0].ready;
-		Gruppen.update({ _id :id}, {$set: {route31 : false}});
-		if (ready) {
-			Gruppen.update({ _id : id}, {$set: {ready : false}});
-			btn[0].style.backgroundColor = "grey";
-		} else {
-			Gruppen.update({ _id : id}, {$set: {ready : true}});
-			btn[0].style.backgroundColor = "green";
-			console.log("test1");
-
-			Tracker.autorun(() => {
-				handler = Meteor.subscribe('spielStart',f_meineGruppe());
-				if (handler.ready()) {
-					const result = Meteor.call('bereit', f_meineGruppe());
-				}
-			});
-
-		} 
-
-	},*/
+		//verlässt die Gruppe
+		Meteor.call('gruppeverlassen', Meteor.user().username);
+		//Leitet die Spieler auf die Startseite zurück
+		window.location.href = '/';
+	},
 })

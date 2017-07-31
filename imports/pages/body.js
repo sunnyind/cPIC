@@ -6,8 +6,9 @@ import './message.js';
 
 
  import { Messages } from '../api/messages.js';
- Meteor.subscribe('userMessages')
- 
+ import { Gruppen } from '../api/messages.js';
+ handler = Meteor.subscribe('userMessages')
+ handler_gruppe = Meteor.subscribe('userGruppen')
 
 
   Template.chat.onRendered(function () {
@@ -19,7 +20,13 @@ import './message.js';
  Template.chat.helpers({
    messages() {
      console.log('Nachricht');
-      
+     const query = Messages.find();
+     handle = query.observeChanges({
+      added: function(id, fields) {
+         console.log("added");
+         $('.panel-body').scrollTop($('.media-list').height());
+       }
+     });
      return Messages.find(); 
    },
  });
@@ -27,6 +34,13 @@ import './message.js';
  Template.chat2.helpers({
    messages() {
      console.log('Nachricht');
+     const query = Messages.find();
+     handle = query.observeChanges({
+      added: function(id, fields) {
+         console.log("added");
+         $('.panel-body').scrollTop($('.media-list').height());
+      }
+     });
      return Messages.find();
    },
  });
@@ -40,11 +54,13 @@ import './message.js';
      const target = event.target;
      const text = target.text.value;
      console.log(text);
+     grp = Gruppen.findOne({"nutzer": Meteor.user().username}).Gruppe;
      // Insert a message into the collection
      Messages.insert({
-       text,
-       createdAt: new Date(), // current time
- 	  owner: Meteor.userId(), username:Meteor.user().username,
+      text,
+      createdAt: new Date(), // current time
+ 	    owner: Meteor.userId(), username:Meteor.user().username,
+      Gruppe: grp,
      });
      // Clear form
      target.text.value = '';
