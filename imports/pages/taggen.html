@@ -32,58 +32,43 @@
 	</head>
   
   	<body>
-  	<h1>Tagger Seite</h1>
+  	<div id="pagewrap">
 
-  	<div class="columnsContainer">
+		<section id="content">
+			<div><h3>Schlagwörter</h3></div>
+				<div class="inputTag">
+				<form class="new-tag" action="/action_page.php">
+	  			  <div class="form-group">
+				     <input class="form-control input-lg" id="inputlg" type="text" name="text" autocomplete="off" placeholder="Tag eingeben" required size="1" maxlength="15" style="width:200px;">
+				     <button class="btn btn-info send" type="submit">Senden</button>
+				  </div>
+			    </form>
+				</div> 	
+				<div class="tags">
+				{{#each TagsListe}}
+			  		{{Tag}}, 
+			  	{{/each}}	
+				</div>	
 
-	  	<div class="leftColumn">
-	  	<div>
-	  		<h2>Was siehst du auf diesem Bild?</h2>
-			{{#with showPic}}
-			<img id= "{{_id}}" class="bild_" src="{{Url}}" style=" border: 10px double; border-color: grey; height: 400px; width: 400px" >
-			{{/with}}
-		</div>  
-		<div class="tags">
-			Tags: <br> 
-			{{#each TagsListe}}
-		  		{{Tag}}, 
-		  	{{/each}}	
-		</div>	
-		<div class="inputTag">
-			<form class="new-tag" action="/action_page.php">
-  			  <div class="form-group">
-  			  <h2>Gebe passende Schlüsselwörter zu deinem Bild ein</h2>
-			     <input class="form-control input-lg" id="inputlg" type="text" name="text" autocomplete="off" placeholder="Tag eingeben" required size="1" maxlength="15" style="width:200px;">
-			     <button class="btn btn-info send" type="submit">Senden</button>
-			  </div>
-		    </form>
-		</div> 
-	  	</div>
-
-	  	<div class="rightColumn">
-	  	<!--<div class="countdown">
-	  			<script type="text/javascript">
-		function countDown(secs,elem) {
-			var element = document.getElementById(elem);
-			element.innerHTML = "Du hast noch "+secs+" sek. Zeit";
-			if (secs < 1){
-				clearTimeout (timer);
-				element.innerHTML = '<h5>Deine Zeit ist abgelaufen!</h5>';
-				element.innerHTML += '<button class="btn btn-info send" type="submit">Zum Zwischenergebnis</button>';
-;
-			}
-			secs -;
-			var timer = setTimeout('countDown('+secs+',"'+elem+'")',1000);
+		</section>
 		
-	</script>
-	<div id="status"></div>
-	<script type="text/javascript">countDown(60,"status");</script>
-	  	</div>}-->
-	  		<h2>Unterhaltung deiner Mitspieler</h2>
-	  	<div class="chat2"></div>
-	  		{{> chat2}}
-	  	</div>
-  	</div>
+		<section id="middle">
+			<div style="text-align: center;">
+				{{#with showPic}}
+				<img id= "{{_id}}" class="bild_" src="{{Url}}" style=" border: 10px double; border-color: grey; height: 400px; width: 400px" >
+				{{/with}}
+			</div> 
+		</section>
+
+		<aside id="sidebar">
+		<h3>Unterhaltung deiner Mitspieler</h3>
+	  	<div class="chat2">{{> chat2}}</div>
+	  		
+		</aside>
+	</div>
   </body>
 </html>
 </template>
+
+
+

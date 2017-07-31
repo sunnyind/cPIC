@@ -1,7 +1,69 @@
 <template name="zwischenErgebnis">
 
 {{clearRound}}
-   <html>
+<html>
+	<head>
+		<meta charset="utf-8">
+	    <meta http-equiv ="X-UA-Compatible" Inhalt ="IE = Rand" />
+	    <meta name ="Ansichtsfenster" Inhalt ="width = Gerätebreite, initial-scale = 1">
+	   		
+	</head>
+	<body>
+	  	<div id="pagewrap_">
+
+			<section id="content_">
+			{{#unless bildRichtig}}
+			<h4> Das Bild wurde nicht erraten! </h4>
+			{{else}}
+			<h4> Das ausgewählte Bild ist richtig! </h4>
+			{{/unless}}
+				<h5> Gruppe:  <b>{{gruppeFinden}}</b></h5>
+				<br>
+				<h5> Runde: <b>{{rundeFinden}}</b></h5>
+				<br>
+				<h5> Punktzahl: <b>{{scoreFinden}}</b></h5>
+				<br>
+				<h5>Schlagwörter:</h5>
+				<br>
+				{{#each findTags}}
+			  		{{Tag}}, 
+			  	{{/each}}
+			  	<br>
+			  	<br>
+			  	<form class="rdy">
+			    <button class="btn btn-info send" type="submit"> Nächste Runde</button>
+			    </form>
+			    <br>
+			    <br>
+			    <form class="weiter">
+			    	<button class="btn btn-info send" type="submit"> Spiel verlassen</button>
+			    </form>
+			</section>
+			
+			<section id="middle_">
+			<h4>Richtiges Bild:</h4>
+			{{#with showPicRichtig}}
+				<div>
+					<img id="{{_id}}" class="bild_" src="{{Url}}" style=" border: 10px solid; border-color: #3C3; height: 400px; width: 400px;left: 0;" >
+				</div>
+			{{/with}}
+			</section>
+
+			<aside id="sidebar_">
+			{{#unless bildRichtig}}
+				<h4> Ausgewähltes Bild:</h4>
+				{{#with showPicAuswahl}}
+					<div>
+						<img id="{{_id}}" class="bild_" src="{{Url}}" style="border: 10px solid; border-color: #F30; height: 400px; width: 400px; left: 0; " >
+					</div>
+				{{/with}}
+			{{/unless}}
+			</aside>
+
+		</div>
+	</body>
+</html>
+  <!-- <html>
 	   <head>
 		<meta charset="utf-8">
 	    <meta http-equiv ="X-UA-Compatible" Inhalt ="IE = Rand" />
@@ -60,5 +122,5 @@
 			</div>
 		</div>
 	</body>
-  </html>
+  </html>-->
 </template>

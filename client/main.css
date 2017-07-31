@@ -20,18 +20,17 @@ h3{
 }
 
 h4{
-  text-align: left;
-  left: 0;
+  padding: 3%;
   }
 
 
 h5{
-
+  
 }
 
  .panel-body{
    overflow-y:scroll;
-   height:60vh;
+   height:25vh;
  }
 
 
@@ -67,6 +66,16 @@ h5{
   margin:40px;
   padding: 10px;
 }
+
+.chat{
+  width:120%;
+  float: left; 
+
+}
+
+
+
+
 /*-----------Side Nav Menü------------------*/
 #mySidenav a {
     position: absolute;
@@ -76,14 +85,13 @@ h5{
     font-size: 20px;
     color: white;
     border-radius: 0 5px 5px 0;
-    color: black;
   }
+
 
 
 #about {
     top: 100px;
     background-color: #4CAF50;
-    text-align: right;
 }
 
 #blog {
@@ -97,7 +105,6 @@ h5{
   border-color: black;
   outline-style: solid;
   outline-width: 5px;
-
   outline-color: black;
   height: 250px; 
   width: 250px;
@@ -136,21 +143,21 @@ body {
   margin: 20px auto;
 }
 #content {
-  width: 30%;
+  width: 20%;
   float: left;
   padding: 5px 15px;
   margin-left: 7em; 
 }
 
 #middle {
-  width: 30%; /* Account for margins + border values */
+  width: 50%; /* Account for margins + border values */
   float: left;
   padding: 5px 15px;
   margin: 0px 5px 5px 5px;
 }
 
 #sidebar {
-  width: 30%;
+  width: 20%;
   padding: 5px 15px;
   float: left;
 }
@@ -316,19 +323,119 @@ body { margin: 0; }
 
 /*----------------- Layout für das Zwischenergebnis -----------------*/
 
-*, *:before, *:after {
-  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+
+import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
+body { 
+  font-family: 'Open Sans', sans-serif;
+  color: #666;
 }
 
-body { margin: 0; }
+/* STRUCTURE */
 
-.columnscontainer { position: relative; margin: .5em; }
+#pagewrap_ {
+  padding: 5px;
+  width: 100%;
+  margin: 20px auto;
+}
+#content_ {
+  width: 30%;
+  float: left;
+  padding: 5px 15px;
+  margin-left: 7em; 
+}
 
-.leftcolumn, .rightcolumn{ padding:1.25;}
+#middle_ {
+  width: 30%; /* Account for margins + border values */
+  float: left;
+  padding: 5px 15px;
+  margin: 0px 5px 5px 5px;
+}
 
-/* MEDIA QUERIES */
-@media screen and (min-width: 47.5em  ) {
-  .leftcolumn { position: absolute; top: 0; left: 0; width: 5em;}
+#sidebar_ {
+  width: 23%;
+  padding: 5px 15px;
+  float: left;
+}
 
-  .rightcolumn { position: absolute; top: 0; right: 0; width: 5em; }   
+/************************************************************************************
+MEDIA QUERIES
+*************************************************************************************/
+/* for 980px or less */
+@media screen and (max-width: 980px) {
+  
+  #pagewrap_ {
+    width: 94%;
+  }
+  #content_ {
+    width: 41%;
+    padding: 1% 4%;
+  }
+  #middle_ {
+    width: 41%;
+    padding: 1% 4%;
+    margin: 0px 0px 5px 5px;
+    float: right;
+  }
+  
+  #sidebar_ {
+    clear: both;
+    padding: 1% 4%;
+    width: auto;
+    float: none;
+  }
+
+  header{
+    padding: 1% 4%;
+  }
+}
+
+/* for 700px or less */
+@media screen and (max-width: 600px) {
+
+  #content_ {
+    width: auto;
+    float: none;
+  }
+  
+  #middle_ {
+    width: auto;
+    float: none;
+    margin-left: 0px;
+  }
+  
+  #sidebar_ {
+    width: auto;
+    float: none;
+    margin-right: 10em;
+  }
+
+}
+
+/* for 480px or less */
+@media screen and (max-width: 480px) {
+
+  header {
+    height: auto;
+  }
+  h1 {
+    font-size: 2em;
+  }
+  #sidebar_ {
+    display: none;
+  }
+
+}
+
+
+#middle_ {
+
+}
+
+#sidebar_{
+
+}
+
+header, #content_, #middle_, #sidebar_ {
+  margin-bottom: 5px;
 }
